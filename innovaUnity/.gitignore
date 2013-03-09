@@ -6,3 +6,11 @@
 *.csproj
 *.unityproj
 *.sln
+*.suo
+
+# Ignore the following file extensions
+*.exe
+*.vcproject
+*.sln
+*.userprefs
+*.pidb
