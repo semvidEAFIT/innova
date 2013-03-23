@@ -17,4 +17,8 @@ public class Player : MonoBehaviour {
 			rigidbody.AddForce(Vector3.up * 10000);
 		}
 	}
+	
+	void OnColliderEnter(Collider c){
+		
+	}
 }
