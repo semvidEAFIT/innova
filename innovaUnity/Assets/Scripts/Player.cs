@@ -18,7 +18,16 @@ public class Player : MonoBehaviour {
 		}
 	}
 	
-	void OnColliderEnter(Collider c){
-		
+	void OnTriggerEnter(Collider c){
+		if (c.tag=="Obstacle"){
+			//destroy obstacle, reset jumpcounter, get closer to crowd
+			Debug.Log("collided with obstacle");
+		}
+		if (c.tag=="Segway"){
+			//get on segway
+		}
+		if (c.tag=="Crowd"){
+			//die?
+		}
 	}
 }
