@@ -3,15 +3,13 @@ using System.Collections;
 
 public class Scenery : MonoBehaviour {
 	
-	public float speed;
+	private float speed;
 	public float maxSpeed;
 	public float sceneryLength;
 	
 	// Use this for initialization
 	void Start () {
-		//speed = 1f;
-		//maxSpeed = 1f;
-		//sceneryLength = 100;
+		speed = 1f;
 	}
 	
 	// Update is called once per frame
