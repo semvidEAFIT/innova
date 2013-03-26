@@ -22,8 +22,15 @@ public class Player : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider c){
-		if(c.CompareTag("Obstacle")){
-			Debug.Log("fuck");
+		if (c.tag == "Obstacle"){
+			//destroy obstacle, reset jumpcounter, get closer to crowd
+			Debug.Log("collided with obstacle");
+		}
+		if (c.tag == "Segway"){
+			//get on segway
+		}
+		if (c.tag == "Crowd"){
+			//die?
 		}
 	}
 }
