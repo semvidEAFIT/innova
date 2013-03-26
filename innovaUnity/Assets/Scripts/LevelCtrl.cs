@@ -15,12 +15,20 @@ public class LevelCtrl : MonoBehaviour {
 	}
 	
 	public GameObject player;
-	private GameObject crowd;
+	public GameObject crowd;
+	public GameObject obstacleGenerator;
 	
 	public List<GameObject> backgrounds;
+	
 	public float sceneryLength;
+	public float gameSpeed;
+	public float maxGameSpeed;
 	
 	private float timeElapsed;
+	
+	void Awake(){
+		levelCtrl = this;
+	}
 	
 	void Start(){
 		for(int i = 0; i < backgrounds.Count; i++){
@@ -29,6 +37,7 @@ public class LevelCtrl : MonoBehaviour {
 		}
 		Instantiate(player, player.transform.position, player.transform.rotation);
 //		Instantiate(crowd, crowd.transform.position, crowd.transform.rotation);
+		Instantiate(obstacleGenerator, obstacleGenerator.transform.position, player.transform.rotation);
 	}
 	
 	void Update(){
