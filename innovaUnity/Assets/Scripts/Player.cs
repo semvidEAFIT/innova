@@ -7,6 +7,7 @@ public class Player : MonoBehaviour {
 	private int timesTripped;
 	private float move;
 	private int countCrashed;
+	private  Crowd crowd; 
 	// Use this for initialization
 	void Start () {
 		move = 0.0001f;
@@ -27,9 +28,12 @@ public class Player : MonoBehaviour {
 			//destroy obstacle, reset jumpcounter, get closer to crowd
 			countCrashed++;
 			Debug.Log("collided with obstacle");
+			
 			if(countCrashed == 2){
+				
 				transform.Translate(5f, 0, 0);
 				countCrashed = 0;
+				
 			}
 			
 		}

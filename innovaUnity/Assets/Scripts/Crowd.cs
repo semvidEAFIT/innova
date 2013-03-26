@@ -16,6 +16,6 @@ public class Crowd : MonoBehaviour {
 	}
 	
 	void accelerarMultitud(){
-		transform.Translate(-speed, 0, 0);
+		transform.Translate(-0.5, 0, 0);
 	}
 }
