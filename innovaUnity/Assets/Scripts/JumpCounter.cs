@@ -6,7 +6,7 @@ public class JumpCounter : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		counter=0;
+		counter = 0;
 	}
 	
 	// Update is called once per frame
