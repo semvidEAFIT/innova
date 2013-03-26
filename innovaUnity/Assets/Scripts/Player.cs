@@ -7,12 +7,12 @@ public class Player : MonoBehaviour {
 	private int timesTripped;
 	private float move;
 	private int countCrashed;
-	private float gameSpeed; 
+	private float speed; 
 	// Use this for initialization
 	void Start () {
 		move = 0.0001f;
 		countCrashed = 0;
-		gameSpeed = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelCtrl>().gameSpeed;
+		speed = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelCtrl>().maxGameSpeed;
 	}
 	
 	// Update is called once per frame
@@ -22,21 +22,25 @@ public class Player : MonoBehaviour {
 		}
 		transform.Translate(move, 0, 0);
 		move *= -1;
+		if(countCrashed > 2){
+			
+			Crowd c=(Crowd)GameObject.Find("Girl(Clone)").GetComponent("Crowd");
+			c.accelerateCrowd();
+		}
+		while(transform.position.x > posX-15){
+				transform.Translate(0.01f, 0, 0);
+			}
 	}
 	
 	void OnTriggerEnter(Collider c){
+		
 		if (c.tag == "Obstacle"){
 			//destroy obstacle, reset jumpcounter, get closer to crowd
 			countCrashed++;
-			Debug.Log("collided with obstacle");
+			float posX = transform.position.x;
 			
-			if(countCrashed == 2){
-				countCrashed = 0;
-				float posX = transform.position.x;
-				while(transform.position.x<posX-25){
-					transform.Translate(gameSpeed,0,0);
-				}
-			}
+			
+			
 			
 		}
 		if (c.tag == "Segway"){
@@ -44,7 +48,13 @@ public class Player : MonoBehaviour {
 		}
 		if (c.tag == "Crowd"){
 			//die?
-			//c.gameObject.GetComponent<Crowd>().accelerarMultitud();
+			c.gameObject.GetComponent<Crowd>().accelerateCrowd();
+		}
+	}
+	
+	void OnTriggerExit(Collider c){
+		if(c.tag=="Obstacle"){
+			Destroy(c.gameObject);
 		}
 	}
 }
