@@ -11,12 +11,12 @@ public class JumpCounter : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Debug.Log("counter: " + counter);
 	}
 	
 	void OnTriggerEnter(Collider  other){
 		if (other.tag == "Obstacle"){
 			counter++;
+			Debug.Log(counter);
 		}
 			
 	}
