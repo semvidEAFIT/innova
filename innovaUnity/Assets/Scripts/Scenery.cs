@@ -11,7 +11,7 @@ public class Scenery : MonoBehaviour {
 	
 	private int timesSwapped;
 	
-	private GameObject[] gameControl;
+	private GameObject gameControl;
 //	public int maxSwapsBeforeObstacles;
 //	
 //	public List<GameObject> obstacles;
@@ -21,10 +21,10 @@ public class Scenery : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		gameControl = GameObject.FindGameObjectsWithTag("GameController");
-		speed = gameControl[0].GetComponent<LevelCtrl>().gameSpeed;
-		maxSpeed = gameControl[0].GetComponent<LevelCtrl>().maxGameSpeed;
-		sceneryLength = gameControl[0].GetComponent<LevelCtrl>().sceneryLength;
+		gameControl = GameObject.FindGameObjectWithTag("GameController");
+		speed = gameControl.GetComponent<LevelCtrl>().gameSpeed;
+		maxSpeed = gameControl.GetComponent<LevelCtrl>().maxGameSpeed;
+		sceneryLength = gameControl.GetComponent<LevelCtrl>().sceneryLength;
 //		timesSwapped = 0;
 //		current = new List<GameObject>();
 //		timeElapsed = 0;
