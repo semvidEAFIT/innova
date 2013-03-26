@@ -21,6 +21,8 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		transform.Translate(0, move, 0);
+		move *= -1;
 		CharacterController controller = GetComponent<CharacterController>();
 		if (Input.GetKeyDown("space") && !jumped){
 			moveDirection.y = jumpSpeed;
@@ -36,7 +38,6 @@ public class Player : MonoBehaviour {
 		if (transform.position.y > 13){
 			falling=true;
 			moveDirection.y -= gravity;
-			
 		}
 		
 		controller.Move(moveDirection * Time.deltaTime);
