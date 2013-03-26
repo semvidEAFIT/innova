@@ -14,7 +14,7 @@ public class ObstacleGenerator : MonoBehaviour{
 	void Start(){
 		timeElapsed = 0f;
 		current = new List<GameObject>();
-		sceneryLength = GameObject.FindGameObjectsWithTag("GameController")[0].GetComponent<LevelCtrl>().sceneryLength;
+		sceneryLength = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelCtrl>().sceneryLength;
 	}
 	
 	void Update(){
