@@ -6,19 +6,41 @@ public class Player : MonoBehaviour {
 	private int coinsCollected;
 	private int timesTripped;
 	private float move;
+	public float jumpSpeed;
+	public float gravity = 20.0F;
+	private Vector3 moveDirection = Vector3.zero;
+	private bool jumped, falling;
 	
 	// Use this for initialization
 	void Start () {
 		move = 0.0001f;
+		jumpSpeed=30F;
+		jumped = false;
+		falling = false;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown("space") && transform.position.y > -10){
-			rigidbody.AddForce(Vector3.up * 10000);
+		CharacterController controller = GetComponent<CharacterController>();
+		if (Input.GetKeyDown("space") && !jumped){
+			moveDirection.y = jumpSpeed;
+			jumped = true;
 		}
-		transform.Translate(move, 0, 0);
-		move *= -1;
+		
+		if (transform.position.y < 1 && falling){
+				moveDirection.y = 0;
+				jumped=false;
+				falling=false;
+		}
+		
+		if (transform.position.y > 13){
+			falling=true;
+			moveDirection.y -= gravity;
+			
+		}
+		
+		controller.Move(moveDirection * Time.deltaTime);
+		
 	}
 	
 	void OnTriggerEnter(Collider c){
