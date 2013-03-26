@@ -22,8 +22,8 @@ public class Player : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider c){
-//		if(c.CompareTag("Obstacle")){
+		if(c.CompareTag("Obstacle")){
 			Debug.Log("fuck");
-//		}
+		}
 	}
 }
