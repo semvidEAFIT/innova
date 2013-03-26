@@ -7,11 +7,12 @@ public class Player : MonoBehaviour {
 	private int timesTripped;
 	private float move;
 	private int countCrashed;
-	private  Crowd crowd; 
+	private float gameSpeed; 
 	// Use this for initialization
 	void Start () {
 		move = 0.0001f;
 		countCrashed = 0;
+		gameSpeed = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelCtrl>().gameSpeed;
 	}
 	
 	// Update is called once per frame
@@ -30,10 +31,11 @@ public class Player : MonoBehaviour {
 			Debug.Log("collided with obstacle");
 			
 			if(countCrashed == 2){
-				
-				transform.Translate(5f, 0, 0);
 				countCrashed = 0;
-				
+				float posX = transform.position.x;
+				while(transform.position.x<posX-25){
+					transform.Translate(gameSpeed,0,0);
+				}
 			}
 			
 		}
@@ -42,6 +44,7 @@ public class Player : MonoBehaviour {
 		}
 		if (c.tag == "Crowd"){
 			//die?
+			//c.gameObject.GetComponent<Crowd>().accelerarMultitud();
 		}
 	}
 }
