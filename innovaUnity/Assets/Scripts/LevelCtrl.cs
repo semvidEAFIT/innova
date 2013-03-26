@@ -15,7 +15,7 @@ public class LevelCtrl : MonoBehaviour {
 	}
 	
 	public GameObject player;
-	private GameObject crowd;
+	public GameObject crowd;
 	
 	public List<GameObject> backgrounds;
 	public float sceneryLength;
@@ -28,7 +28,7 @@ public class LevelCtrl : MonoBehaviour {
 				(transform.position.y + sceneryLength / 2), transform.position.z), backgrounds[i].transform.rotation);
 		}
 		Instantiate(player, player.transform.position, player.transform.rotation);
-//		Instantiate(crowd, crowd.transform.position, crowd.transform.rotation);
+		Instantiate(crowd, crowd.transform.position, crowd.transform.rotation);
 	}
 	
 	void Update(){
