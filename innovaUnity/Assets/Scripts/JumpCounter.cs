@@ -16,6 +16,7 @@ public class JumpCounter : MonoBehaviour {
 	void OnTriggerEnter(Collider  other){
 		if (other.tag == "Obstacle"){
 			counter++;
+			Destroy(other.gameObject, 1f);
 			Debug.Log(counter);
 		}
 			

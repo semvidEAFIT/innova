@@ -31,7 +31,6 @@ public class Scenery : MonoBehaviour {
 			transform.Translate(new Vector3(-3 * sceneryLength, 0, 0));
 			timesSwapped += 1;
 			if((obstacles.Count > 0) && (timesSwapped > maxSwapsBeforeObstacles)){
-				Destroy(current);
 				createObstacle();
 			}
 		}
