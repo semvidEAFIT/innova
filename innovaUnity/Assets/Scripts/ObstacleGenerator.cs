@@ -19,19 +19,19 @@ public class ObstacleGenerator : MonoBehaviour{
 	
 	void Update(){
 		timeElapsed += Time.deltaTime;
-		if(timeElapsed >= 0.5f){
+		if(timeElapsed >= 0.7f){
 			createObstacles();
 			timeElapsed = 0f;
 		}
 	}
 	
 	void createObstacles(){
-		int r = Mathf.RoundToInt(Random.Range(0, obstacles.Count));
+		int r = Mathf.RoundToInt(Random.Range(0, obstacles.Count * 2));
 		for(int i = 0; i < obstacles.Count; i++){
 			if(i == r){
 				current.Add(Instantiate(obstacles[i], new Vector3(Mathf.RoundToInt(Random.Range(
 					transform.position.x - (sceneryLength / 2), sceneryLength)) + sceneryLength, 
-					obstacles[i].transform.position.y, transform.position.z - 1), 
+					transform.position.y, obstacles[1].transform.position.z), 
 					obstacles[i].transform.rotation) as GameObject);
 				current[current.Count - 1].gameObject.transform.parent = this.gameObject.transform;
 			}
