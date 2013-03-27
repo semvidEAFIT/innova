@@ -2,26 +2,25 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ObstacleGenerator : MonoBehaviour{
+public class ObjectGenerator : MonoBehaviour{
 	
 	public List<GameObject> obstacles;
 	private List<GameObject> current;
 	
-	private float timeElapsed;
+	private float iniTime;
 	
 	private float sceneryLength;
 	
 	void Start(){
-		timeElapsed = 0f;
+		iniTime = 0f;
 		current = new List<GameObject>();
 		sceneryLength = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelCtrl>().sceneryLength;
 	}
 	
 	void Update(){
-		timeElapsed += Time.deltaTime;
-		if(timeElapsed >= 0.7f){
+		if(Time.time - iniTime >= 1f){
 			createObstacles();
-			timeElapsed = 0f;
+			iniTime = Time.time;
 		}
 	}
 	

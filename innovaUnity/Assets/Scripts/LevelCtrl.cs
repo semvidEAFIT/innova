@@ -40,7 +40,8 @@ public class LevelCtrl : MonoBehaviour {
 		Instantiate(player, player.transform.position, player.transform.rotation);
 
 		Instantiate(crowd, crowd.transform.position, crowd.transform.rotation);
-		Instantiate(obstacleGenerator, obstacleGenerator.transform.position, player.transform.rotation);
+		Instantiate(obstacleGenerator, new Vector3(transform.position.x + sceneryLength, obstacleGenerator.transform.position.y, 
+			obstacleGenerator.transform.position.z), player.transform.rotation);
 
 	}
 	
