@@ -59,6 +59,9 @@ public class Player : MonoBehaviour {
 			//destroy obstacle, reset jumpcounter, get closer to crowd
 			countCrashed++;
 			moveDirection.x -= 3000 * Time.deltaTime;
+			
+			
+			Destroy(c.gameObject, 0.1F);
 		}
 		if (c.tag == "Segway"){
 			//get on segway
@@ -67,12 +70,6 @@ public class Player : MonoBehaviour {
 			//die?
 			Destroy(this.gameObject);
 			c.gameObject.GetComponent<Crowd>().accelerateCrowd();
-		}
-	}
-	
-	void OnTriggerExit(Collider c){
-		if(c.tag == "Obstacle"){
-			Destroy(c.gameObject);
 		}
 	}
 }
