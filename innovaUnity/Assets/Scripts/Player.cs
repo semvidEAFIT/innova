@@ -36,10 +36,8 @@ public class Player : MonoBehaviour {
 			float posX = transform.position.x;
 			while(transform.position.x > posX-28f && translate){
 			
-				transform.Translate(speed, 0, 0);
-				Debug.Log("velocidad"+speed);
-				Debug.Log("posX"+posX);
-				Debug.Log("position now"+transform.position);
+				transform.Translate(speed * Time.deltaTime, 0, 0);
+
 			}
 		translate=false;
 		
@@ -77,7 +75,7 @@ public class Player : MonoBehaviour {
 		}
 		if (c.tag == "Crowd"){
 			//die?
-			c.gameObject.GetComponent<Crowd>().accelerateCrowd();
+			
 		}
 	}
 	
