@@ -45,6 +45,8 @@ public class LevelCtrl : MonoBehaviour {
 	}
 	
 	void Update(){
-		
+		if(Time.time >= 40f){
+			Debug.Log("Se acabó'sta mondá");
+		}
 	}
 }
