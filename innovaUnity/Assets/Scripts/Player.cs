@@ -9,8 +9,8 @@ public class Player : MonoBehaviour {
 	private bool jumped, falling;
 	private float move;
 	private int countCrashed;
-	private float speed; 
-	private bool translate;
+	private float speed;
+	private CharacterController controller;
 	
 	// Use this for initialization
 	void Start () {
@@ -20,30 +20,15 @@ public class Player : MonoBehaviour {
 		falling = false;
 		countCrashed = 0;
 		speed = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelCtrl>().maxGameSpeed;
-		translate=false;
+		
+		controller = GetComponent<CharacterController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		transform.Translate(0, move, 0);
 		move *= -1;
-
-		if(countCrashed >= 2){
-			
-			Crowd c=(Crowd)GameObject.Find("Girl(Clone)").GetComponent("Crowd");
-			c.accelerateCrowd();
-		}
-			float posX = transform.position.x;
-			while(transform.position.x > posX-28f && translate){
-			
-				transform.Translate(speed, 0, 0);
-				Debug.Log("velocidad"+speed);
-				Debug.Log("posX"+posX);
-				Debug.Log("position now"+transform.position);
-			}
-		translate=false;
 		
-		CharacterController controller = GetComponent<CharacterController>();
 		if (Input.GetKeyDown("space") && !jumped){
 			moveDirection.y = jumpSpeed;
 			jumped = true;
@@ -60,6 +45,10 @@ public class Player : MonoBehaviour {
 			moveDirection.y -= gravity;
 		}
 		
+		if (transform.position.x < -30 && countCrashed==1) {
+			moveDirection.x=0;
+		}
+		
 		controller.Move(moveDirection * Time.deltaTime);
 		
 	}
@@ -69,20 +58,20 @@ public class Player : MonoBehaviour {
 		if (c.tag == "Obstacle"){
 			//destroy obstacle, reset jumpcounter, get closer to crowd
 			countCrashed++;
-			translate=true;
-			
+			moveDirection.x -= 3000 * Time.deltaTime;
 		}
 		if (c.tag == "Segway"){
 			//get on segway
 		}
 		if (c.tag == "Crowd"){
 			//die?
+			Destroy(this.gameObject);
 			c.gameObject.GetComponent<Crowd>().accelerateCrowd();
 		}
 	}
 	
 	void OnTriggerExit(Collider c){
-		if(c.tag=="Obstacle"){
+		if(c.tag == "Obstacle"){
 			Destroy(c.gameObject);
 		}
 	}
