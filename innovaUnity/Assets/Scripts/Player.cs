@@ -49,6 +49,21 @@ public class Player : MonoBehaviour {
 		if (transform.position.x < -30 && countCrashed==1) {
 			moveDirection.x=0;
 		}
+	
+
+        if (Input.GetKeyDown(KeyCode.Z)){
+            
+			controller.radius=controller.radius/2;
+			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z+ 2.5f);
+			Debug.Log("entro down" + controller.center.z);
+		}
+		
+		if(Input.GetKeyUp(KeyCode.Z)){
+				
+			controller.radius = controller.radius*2;
+			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z - 2.5f);
+			Debug.Log("entro" + controller.center.z);
+		}
 		
 		controller.Move(moveDirection * Time.deltaTime);
 		
