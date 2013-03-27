@@ -76,9 +76,6 @@ public class Player : MonoBehaviour {
 			Destroy(c.gameObject);
 			countCrashed++;
 			moveDirection.x -= 3000 * Time.deltaTime;
-			
-			
-			Destroy(c.gameObject, 0.1F);
 		}
 		if (c.tag == "Segway"){
 			//get on segway
