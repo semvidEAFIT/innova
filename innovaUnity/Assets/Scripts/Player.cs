@@ -2,14 +2,15 @@ using UnityEngine;
 using System.Collections;
 
 public class Player : MonoBehaviour {
-	
-	private int coinsCollected;
-	private int timesTripped;
-	private float move;
+
 	public float jumpSpeed;
 	public float gravity = 20.0F;
 	private Vector3 moveDirection = Vector3.zero;
 	private bool jumped, falling;
+	private float move;
+	private int countCrashed;
+	private float speed;
+	private CharacterController controller;
 	
 	// Use this for initialization
 	void Start () {
@@ -17,13 +18,17 @@ public class Player : MonoBehaviour {
 		jumpSpeed=30F;
 		jumped = false;
 		falling = false;
+		countCrashed = 0;
+		speed = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelCtrl>().maxGameSpeed;
+		
+		controller = GetComponent<CharacterController>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		transform.Translate(0, move, 0);
 		move *= -1;
-		CharacterController controller = GetComponent<CharacterController>();
+		
 		if (Input.GetKeyDown("space") && !jumped){
 			moveDirection.y = jumpSpeed;
 			jumped = true;
@@ -40,20 +45,34 @@ public class Player : MonoBehaviour {
 			moveDirection.y -= gravity;
 		}
 		
+		if (transform.position.x < -30 && countCrashed==1) {
+			moveDirection.x=0;
+		}
+		
 		controller.Move(moveDirection * Time.deltaTime);
 		
 	}
 	
 	void OnTriggerEnter(Collider c){
+		
 		if (c.tag == "Obstacle"){
 			//destroy obstacle, reset jumpcounter, get closer to crowd
-			Debug.Log("collided with obstacle");
+			countCrashed++;
+			moveDirection.x -= 3000 * Time.deltaTime;
 		}
 		if (c.tag == "Segway"){
 			//get on segway
 		}
 		if (c.tag == "Crowd"){
 			//die?
+			Destroy(this.gameObject);
+			c.gameObject.GetComponent<Crowd>().accelerateCrowd();
+		}
+	}
+	
+	void OnTriggerExit(Collider c){
+		if(c.tag == "Obstacle"){
+			Destroy(c.gameObject);
 		}
 	}
 }
