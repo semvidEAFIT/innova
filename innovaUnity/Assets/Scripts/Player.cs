@@ -28,6 +28,7 @@ public class Player : MonoBehaviour {
 	void Update () {
 		transform.Translate(0, move, 0);
 		move *= -1;
+
 		
 		if (Input.GetKeyDown("space") && !jumped){
 			moveDirection.y = jumpSpeed;
@@ -48,6 +49,21 @@ public class Player : MonoBehaviour {
 		if (transform.position.x < -30 && countCrashed==1) {
 			moveDirection.x=0;
 		}
+	
+
+        if (Input.GetKeyDown(KeyCode.DownArrow)){
+            
+			controller.radius=controller.radius/2;
+			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z+ 2.5f);
+			
+		}
+		
+		if(Input.GetKeyUp(KeyCode.DownArrow)){
+				
+			controller.radius = controller.radius*2;
+			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z - 2.5f);
+			
+		}
 		
 		controller.Move(moveDirection * Time.deltaTime);
 		
@@ -57,6 +73,7 @@ public class Player : MonoBehaviour {
 		
 		if (c.tag == "Obstacle"){
 			//destroy obstacle, reset jumpcounter, get closer to crowd
+			Destroy(c.gameObject);
 			countCrashed++;
 			moveDirection.x -= 3000 * Time.deltaTime;
 			
