@@ -9,7 +9,6 @@ public class Player : MonoBehaviour {
 	private bool jumped, falling;
 	private float move;
 	private int countCrashed;
-	private float speed;
 	private CharacterController controller;
 	
 	// Use this for initialization
@@ -19,8 +18,6 @@ public class Player : MonoBehaviour {
 		jumped = false;
 		falling = false;
 		countCrashed = 0;
-		speed = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelCtrl>().maxGameSpeed;
-		
 		controller = GetComponent<CharacterController>();
 	}
 	
@@ -28,7 +25,6 @@ public class Player : MonoBehaviour {
 	void Update () {
 		transform.Translate(0, move, 0);
 		move *= -1;
-
 		
 		if (Input.GetKeyDown("space") && !jumped){
 			moveDirection.y = jumpSpeed;
@@ -73,7 +69,6 @@ public class Player : MonoBehaviour {
 		
 		if (c.tag == "Obstacle"){
 			//destroy obstacle, reset jumpcounter, get closer to crowd
-			Destroy(c.gameObject);
 			countCrashed++;
 			moveDirection.x -= 3000 * Time.deltaTime;
 		}
