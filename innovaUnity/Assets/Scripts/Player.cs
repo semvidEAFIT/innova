@@ -59,9 +59,6 @@ public class Player : MonoBehaviour {
 			//destroy obstacle, reset jumpcounter, get closer to crowd
 			countCrashed++;
 			moveDirection.x -= 3000 * Time.deltaTime;
-			
-			
-			Destroy(c.gameObject, 0.1F);
 		}
 		if (c.tag == "Segway"){
 			//get on segway
