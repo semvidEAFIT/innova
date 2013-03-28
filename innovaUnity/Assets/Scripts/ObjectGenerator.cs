@@ -38,8 +38,7 @@ public class ObjectGenerator : MonoBehaviour{
 		}
 		
 		//CAMBIAR "20" A UNA VARIABLE
-		if(distanceRun >= 20 && !segwayUsed){
-			Debug.Log("Se metió.");
+		if(distanceRun >= 5 && !segwayUsed){
 			createSegway();
 		}
 	}
@@ -59,7 +58,7 @@ public class ObjectGenerator : MonoBehaviour{
 	
 	void createSegway(){
 		if(Mathf.RoundToInt(Random.Range(0, 5)) <= 2){
-			Instantiate(segwayGO, new Vector3(transform.position.x + sceneryLength, transform.position.y, transform.position.z), 
+			Instantiate(segwayGO, new Vector3(transform.position.x + sceneryLength, transform.position.y, segwayGO.transform.position.z), 
 				segwayGO.transform.rotation);
 		}
 		segwayUsed = true;

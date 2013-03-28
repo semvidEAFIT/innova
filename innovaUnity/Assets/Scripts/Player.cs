@@ -73,12 +73,32 @@ public class Player : MonoBehaviour {
 			moveDirection.x -= 3000 * Time.deltaTime;
 		}
 		if (c.tag == "Segway"){
-			//get on segway
+			if(Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)){
+				Debug.Log("segway yall");
+				c.gameObject.transform.parent = this.transform.parent;
+			}
 		}
 		if (c.tag == "Crowd"){
 			//die?
 			Destroy(this.gameObject);
 			c.gameObject.GetComponent<Crowd>().accelerateCrowd();
+		}
+	}
+	
+	void OnTriggerStay(Collider c){
+		if (c.tag == "Segway"){
+			if(Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)){
+				Debug.Log("segway yall");
+				c.gameObject.transform.parent = this.transform.parent;
+			}
+		}
+	}
+	
+	void OnTriggerExit(Collider c){
+		if (c.tag == "Segway"){
+			if(Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)){
+				Debug.Log("segway yall");
+			}
 		}
 	}
 }

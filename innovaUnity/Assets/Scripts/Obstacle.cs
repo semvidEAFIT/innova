@@ -6,14 +6,14 @@ public class Obstacle : MonoBehaviour {
 	public float speed;
 	private bool blink;
 	private float timer;
-	private bool havesChild;
+	private bool hasChild;
 	
 	// Use this for initialization
 	void Start () {
 		blink = false;
 		timer=0;
-		if (transform.childCount>0) havesChild=true;
-		else havesChild=false;
+		if (transform.childCount>0) hasChild=true;
+		else hasChild=false;
 	}
 	
 	// Update is called once per frame
@@ -22,7 +22,7 @@ public class Obstacle : MonoBehaviour {
 		if (blink){
 			timer+=Time.deltaTime;
 			if (timer>0.05f)	{
-				if (havesChild) {
+				if (hasChild) {
 					foreach (Transform child in transform){
 						child.renderer.enabled = !child.renderer.enabled;
 					}
@@ -36,7 +36,7 @@ public class Obstacle : MonoBehaviour {
 	void OnTriggerEnter (Collider c) {
 		if (c.tag == "Player"){
 			Destroy(this.gameObject, 0.3F);
-			blink=true;
+			blink = true;
 		}
 	}
 }

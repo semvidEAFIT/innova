@@ -13,18 +13,22 @@ public class LevelCtrl : MonoBehaviour {
 			return levelCtrl;
 		}
 	}
+		
+	public float sceneryLength;
+	public float sceneryHeight;
+	
+	public float skyLength;
+	
+	public float gameSpeed;
+	public float maxGameSpeed;
+	
+	public GameObject obstacleGenerator;
+	
+	public List<GameObject> backgrounds;
+	public List<GameObject> sky;
 	
 	public GameObject player;
 	public GameObject crowd;
-
-	public GameObject obstacleGenerator;
-
-	
-	public List<GameObject> backgrounds;
-	
-	public float sceneryLength;
-	public float gameSpeed;
-	public float maxGameSpeed;
 	
 	private float timeElapsed;
 	
@@ -33,9 +37,14 @@ public class LevelCtrl : MonoBehaviour {
 	}
 	
 	void Start(){
+		for(int i = 0; i < sky.Count; i++){
+			Instantiate(sky[i], new Vector3(sky[i].transform.position.x + (i * skyLength), sky[i].transform.position.y + 20, sky[i].transform.position.z), 
+				sky[i].transform.rotation);
+		}
+		
 		for(int i = 0; i < backgrounds.Count; i++){
-				Instantiate(backgrounds[i], new Vector3(transform.position.x + (i *sceneryLength), 
-				(transform.position.y + sceneryLength / 2), transform.position.z), backgrounds[i].transform.rotation);
+				Instantiate(backgrounds[i], new Vector3(transform.position.x + (i * sceneryLength), 
+				(transform.position.y + sceneryHeight / 2.1f), transform.position.z), backgrounds[i].transform.rotation);
 		}
 		Instantiate(player, player.transform.position, player.transform.rotation);
 

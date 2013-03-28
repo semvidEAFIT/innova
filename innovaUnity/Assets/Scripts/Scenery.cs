@@ -11,6 +11,8 @@ public class Scenery : MonoBehaviour {
 	
 	private int timesSwapped;
 	
+	private int buildingCount;
+	
 	private GameObject gameControl;
 //	public int maxSwapsBeforeObstacles;
 //	
@@ -22,9 +24,10 @@ public class Scenery : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		gameControl = GameObject.FindGameObjectWithTag("GameController");
-		speed = gameControl.GetComponent<LevelCtrl>().gameSpeed;
-		maxSpeed = gameControl.GetComponent<LevelCtrl>().maxGameSpeed;
+		speed = gameControl.GetComponent<LevelCtrl>().gameSpeed * 0.8f;
+		maxSpeed = gameControl.GetComponent<LevelCtrl>().maxGameSpeed * 0.9f;
 		sceneryLength = gameControl.GetComponent<LevelCtrl>().sceneryLength;
+		buildingCount = gameControl.GetComponent<LevelCtrl>().backgrounds.Count;
 //		timesSwapped = 0;
 //		current = new List<GameObject>();
 //		timeElapsed = 0;
@@ -37,11 +40,7 @@ public class Scenery : MonoBehaviour {
 			speed += speed / 100;
 		}
 		if(transform.position.x < -sceneryLength - 10){
-			transform.Translate(new Vector3(-3 * sceneryLength, 0, 0));
-			//timesSwapped += 1;
-//			if((obstacles.Count > 0) && (timesSwapped > maxSwapsBeforeObstacles)){
-//				createObstacle();
-//			}
+			transform.Translate(new Vector3(-buildingCount * sceneryLength, 0, 0));
 		}
 //		if(!current.Equals(null)){
 //			current.transform.Translate(speed, 0, 0);
