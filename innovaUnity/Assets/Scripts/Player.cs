@@ -6,10 +6,9 @@ public class Player : MonoBehaviour {
 	public float jumpSpeed = 60.0f;
 	public float gravity = 1.0F;
 	private Vector3 moveDirection = Vector3.zero;
-	private bool jumped, falling;
+	private bool jumped;
 	private float move;
 	private int countCrashed;
-	private float speed;
 	private CharacterController controller;
 	private float height;
 	
@@ -18,10 +17,7 @@ public class Player : MonoBehaviour {
 		height = transform.position.y;
 		move = 0.0001f;
 		jumped = false;
-		falling = false;
 		countCrashed = 0;
-		speed = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelCtrl>().maxGameSpeed;
-		
 		controller = GetComponent<CharacterController>();
 	}
 	
@@ -45,21 +41,6 @@ public class Player : MonoBehaviour {
 			}
 		}
 		
-		if (Input.GetKeyDown("space") && !jumped){
-			moveDirection.y = jumpSpeed;
-			jumped = true;
-		}
-		
-		if (transform.position.y < 1 && falling){
-				moveDirection.y = 0;
-				jumped=false;
-				falling=false;
-		}
-		
-		if (transform.position.y > 13){
-			falling=true;
-			moveDirection.y -= gravity;
-		}
 		
 		
 		if (transform.position.x < -30 && countCrashed==1) {
@@ -80,7 +61,6 @@ public class Player : MonoBehaviour {
 			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z - 2.5f);
 			
 		}
-		Debug.Log(moveDirection);
 		controller.Move(moveDirection * Time.deltaTime);
 		
 	}

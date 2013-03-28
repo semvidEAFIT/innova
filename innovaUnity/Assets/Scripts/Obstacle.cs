@@ -10,7 +10,7 @@ public class Obstacle : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		blink=false;
+		blink = false;
 		timer=0;
 		if (transform.childCount>0) havesChild=true;
 		else havesChild=false;
