@@ -21,7 +21,7 @@ class Database {
 
     private function __construct() {
         $this->server = 'localhost';
-        $this->databaseName = 'noticias_eafit';
+        $this->databaseName = 'innova';
         $this->user = 'root';
         $this->password = '';
     }

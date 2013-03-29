@@ -10,95 +10,66 @@ class DAO {
         $this->dbEngine = MysqlDBC::getInstance();
     }
 
-    function getUser($user, $password) {
-        $user = $this->dbEngine->cleanVar($user);
-        $password = $this->dbEngine->cleanVar($password);
+     // <editor-fold defaultstate="collapsed" desc="Player Methods">
+    function getPlayerByDocument($document){
+        $document = $this->dbEngine->clearVar($document);
+        
         $result = $this->dbEngine->getResult(
-                "SELECT * FROM user
-                WHERE user = '$user'
-                    AND password = '$password'");
-        if ($this->dbEngine->getRowCount($result) == 0){
-            return getErrorArray(
-                    '01',
-                    "No existe el usuario $user con la clave indicada");
-        }else{
-            return User::getUserObj($result->fetch_object())->toArray();
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="News Methods">
-    function getNews() {
-        $result = $this->dbEngine->getResult(
-                "SELECT * FROM news");
-        $NewsArray = array();
-        while ($row = $result->fetch_object()) {
-            $News = News::getNewsObject($row);
-            array_push($NewsArray, $News);
-        }
-        return $NewsArray;
-    }
-
-    function getNewsById($id) {
-        $id = $this->dbEngine->cleanVar($id);
-
-        $result = $this->dbEngine->getResult(
-                "SELECT * FROM news WHERE id = '$id' LIMIT 1");
+                "SELECT * FROM players WHERE document = '$document' LIMIT 1");
         $row = $result->fetch_object();
-        if ($row != null) {
-            return News::getNewsObject($row);
+        if($row != null){
+            return Player::getPlayerObject($row);
+        }else{
+            return getErrorArray('01', "No existe un jugador con el documento '$document'");
         }
-        return getErrorArray('01', "No existe una noticia con el id '$id'");
     }
-
-    function createNews($News) {
-        $id = $this->dbEngine->cleanVar($News->getId());
-        $title = $this->dbEngine->cleanVar($News->getTitle());
-        $brief = $this->dbEngine->cleanVar($News->getBrief());
-        $content = $this->dbEngine->cleanVar($News->getContent());
-        return $this->dbEngine->insert(
-                        "INSERT INTO `news` (`id` ,`title` ,`brief` ,`content`)
-                VALUES ('$id' ,'$title' ,'$brief' ,'$content' )"
-        );
+    
+    function updatePlayer($Player){
+        $id = $Player->getId();
+        $playCount = $Player->getPlayCount();
+        $score = $Player->getScore();
+        $lastDate = $Player->getLastDate();
+        
+        return $this->dbEngine->update(
+                "UPDATE players SET `score`='$score', `playCount`='$playCount', `lastDate`='$lastDate' WHERE `id`='$id'");
     }
-
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="Comment Methods">
-    function getComments($id_news) {
-        $id_news = $this->dbEngine->cleanVar($id_news);
-
+    
+    function getPlayers(){
+        $result = $this->dbEngine->getResult("SELECT * FROM players");
+        $PlayersArray = array();
+        while($row = $result->fetch_object()){
+            $Player = Player::getPlayerObject($row);
+            array_push($PlayersArray, $Player);
+        }
+        return $PlayersArray;
+    }
+    
+    function getTopPlayers($topLength){
+        $topLength = $this->dbEngine->cleanVar($topLength);
         $result = $this->dbEngine->getResult(
-                "SELECT user.id, user.username, '' as password
-                    FROM comment, user
-                    WHERE comment.id_user = user.id
-                        AND id_news = '$id_news'");
-        $userArray = array();
-        while ($row = $result->fetch_object()) {
-            $User = User::getUserObject($row);
-            $userArray[$User->getId()] = $User;
+                "SELECT * FROM players ORDER BY score DESC LIMIT $topLength");
+        $PlayersArray = array();
+        while($row = $result->fetch_object()){
+            $Player = Player::getPlayerObject($row);
+            array_push($PlayersArray, $Player);
         }
-
-        $result2 = $this->dbEngine->getResult(
-                "SELECT * FROM comment
-                    WHERE  id_news = '$id_news'");
-        $commentArray = array();
-        while ($row = $result2->fetch_object()) {
-            $row->User = $userArray[$row->id_user];
-            $Comment = Comment::getCommentObject($row);
-            array_push($commentArray, $Comment);
-        }
-        return $commentArray;
+        return $PlayersArray;
     }
-
-    function createComment($Comment) {
-        $id = $this->dbEngine->getVar($Comment->getId());
-        $id_news = $this->dbEngine->getVar($Comment->getId_news());
-        $date = $this->dbEngine->getVar($Comment->getDate());
-        $comment = $this->dbEngine->getVar($Comment->getComment());
+    
+    function createPlayer($Player){
+        $id = 0;
+        $document = $Player->getDocument();
+        $name = $Player->getName();
+        $lastNames = $Player->getLastNames();
+        $email = $Player->getEmail();
+        $institution = $Player->getInstitution();
+        $score = $Player->getScore();
+        $playCount = $Player->getPlayCount();
+        $lastDate = $Player->getLastDate();
+        
         return $this->dbEngine->insert(
-                        "INSERT INTO `comment` (`id` ,`id_news` ,`id_user` ,`date` ,`comment` )
-	VALUES ('$id' ,'$id_news' ,'1' ,'$date' ,'$comment' )"
-        );
+                "INSERT INTO players (id, document, name, lastNames, email, institution, score, playCount, lastDate)
+                    VALUES ($id, '$document', '$name', '$lastNames', '$email', '$institution', $score, $playCount, '$lastDate')");
     }
     // </editor-fold>
 }

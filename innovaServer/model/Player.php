@@ -15,16 +15,22 @@ class Player {
     private $id;
     private $document;
     private $name;
+    private $lastNames;
     private $email;
     private $institution;
+    private $score;
+    private $playCount;
     private $lastDate;
     
-    function __construct($id, $document, $name, $email, $institution, $lastDate) {
+    function __construct($id, $document, $name, $lastNames, $email, $institution, $score, $playCount, $lastDate) {
         $this->id = $id;
-        $this->document = $document;
+        $this->document = str_replace(str_split("./-\\<> "), "", $document);
         $this->name = $name;
+        $this->lastNames = $lastNames;
         $this->email = $email;
         $this->institution = $institution;
+        $this->score = $score;
+        $this->playCount = $playCount;
         $this->lastDate = $lastDate;
     }
 
@@ -33,8 +39,11 @@ class Player {
                 'id' => $this->getId(),
                 'document' => $this->getDocument(),
                 'name' => $this->getName(),
+                'lastName' => $this->getLastNames(),
                 'email' => $this->getEmail(),
                 'institution' => $this->getInstitution(),
+                'score' => $this->getScore(),
+                'playCount' => $this->playCount,
                 'lastDate' => $this->getLastDate()
         );
     }
@@ -44,10 +53,12 @@ class Player {
             $object = $object->Player;
         }
         return new Player(
-               $object->id, $object->document, $object->name, $object->email, $object->institution, $object->lastDate
+               $object->id, $object->document, $object->name, $object->lastName, $object->email, $object->institution, $object->score, $object->playCount, $object->lastDate
         );
     }
     
+    // <editor-fold defaultstate="collapsed" desc="Gets y Sets">
+
     public function getId() {
         return $this->id;
     }
@@ -72,6 +83,14 @@ class Player {
         $this->name = $name;
     }
 
+    public function getLastNames() {
+        return $this->lastNames;
+    }
+
+    public function setLastNames($lastNames) {
+        $this->lastNames = $lastNames;
+    }
+
     public function getEmail() {
         return $this->email;
     }
@@ -88,6 +107,22 @@ class Player {
         $this->institution = $institution;
     }
     
+    public function getScore() {
+        return $this->score;
+    }
+
+    public function setScore($score) {
+        $this->score = $score;
+    }
+
+    public function getPlayCount() {
+        return $this->playCount;
+    }
+
+    public function setPlayCount($playCount) {
+        $this->playCount = $playCount;
+    }
+        
     public function getLastDate() {
         return $this->lastDate;
     }
@@ -96,8 +131,7 @@ class Player {
         $this->lastDate = $lastDate;
     }
 
-
-
+    // </editor-fold>
 }
 
 ?>
