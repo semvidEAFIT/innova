@@ -38,5 +38,6 @@ public class Obstacle : MonoBehaviour {
 			Destroy(this.gameObject, 0.3F);
 			blink = true;
 		}
+		
 	}
 }
