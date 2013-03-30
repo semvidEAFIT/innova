@@ -4,6 +4,10 @@ include ('../dao/MysqlDBC.php');
 
 class DAO {
 
+    /**
+     *
+     * @var MysqlDBC 
+     */
     private $dbEngine;
 
     function __construct() {
@@ -12,7 +16,7 @@ class DAO {
 
      // <editor-fold defaultstate="collapsed" desc="Player Methods">
     function getPlayerByDocument($document){
-        $document = $this->dbEngine->clearVar($document);
+        $document = $this->dbEngine->cleanVar($document);
         
         $result = $this->dbEngine->getResult(
                 "SELECT * FROM players WHERE document = '$document' LIMIT 1");
@@ -20,7 +24,7 @@ class DAO {
         if($row != null){
             return Player::getPlayerObject($row);
         }else{
-            return getErrorArray('01', "No existe un jugador con el documento '$document'");
+            return null;
         }
     }
     
@@ -57,10 +61,9 @@ class DAO {
     }
     
     function createPlayer($Player){
-        $id = 0;
         $document = $Player->getDocument();
         $name = $Player->getName();
-        $lastNames = $Player->getLastNames();
+        $lastNames = $Player->getLastName();
         $email = $Player->getEmail();
         $institution = $Player->getInstitution();
         $score = $Player->getScore();
@@ -68,8 +71,19 @@ class DAO {
         $lastDate = $Player->getLastDate();
         
         return $this->dbEngine->insert(
-                "INSERT INTO players (id, document, name, lastNames, email, institution, score, playCount, lastDate)
-                    VALUES ($id, '$document', '$name', '$lastNames', '$email', '$institution', $score, $playCount, '$lastDate')");
+                "INSERT INTO players (document, name, lastName, email, institution, score, playCount, lastDate)
+                    VALUES ('$document', '$name', '$lastNames', '$email', '$institution', $score, $playCount, '$lastDate')");
+    }
+    
+    function getPlayerRanking($player){
+        $score = $this->dbEngine->cleanVar($player->getScore());
+        return $this->dbEngine->getResult(
+                "SELECT COUNT(*)+1 as ranking FROM (
+                    SELECT id, document, name, lastName, score 
+                    FROM players
+                    ORDER BY score DESC
+                 ) as temp WHERE score > $score")->fetch_object()->ranking;
+        
     }
     // </editor-fold>
 }

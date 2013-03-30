@@ -15,18 +15,18 @@ class Player {
     private $id;
     private $document;
     private $name;
-    private $lastNames;
+    private $lastName;
     private $email;
     private $institution;
     private $score;
     private $playCount;
     private $lastDate;
     
-    function __construct($id, $document, $name, $lastNames, $email, $institution, $score, $playCount, $lastDate) {
+    function __construct($id, $document, $name, $lastName, $email, $institution, $score, $playCount, $lastDate) {
         $this->id = $id;
         $this->document = str_replace(str_split("./-\\<> "), "", $document);
         $this->name = $name;
-        $this->lastNames = $lastNames;
+        $this->lastName = $lastName;
         $this->email = $email;
         $this->institution = $institution;
         $this->score = $score;
@@ -39,7 +39,7 @@ class Player {
                 'id' => $this->getId(),
                 'document' => $this->getDocument(),
                 'name' => $this->getName(),
-                'lastName' => $this->getLastNames(),
+                'lastName' => $this->getLastName(),
                 'email' => $this->getEmail(),
                 'institution' => $this->getInstitution(),
                 'score' => $this->getScore(),
@@ -53,7 +53,15 @@ class Player {
             $object = $object->Player;
         }
         return new Player(
-               $object->id, $object->document, $object->name, $object->lastName, $object->email, $object->institution, $object->score, $object->playCount, $object->lastDate
+               $object->id, 
+                $object->document, 
+                $object->name, 
+                $object->lastName, 
+                $object->email, 
+                $object->institution, 
+                $object->score, 
+                $object->playCount, 
+                $object->lastDate
         );
     }
     
@@ -83,12 +91,12 @@ class Player {
         $this->name = $name;
     }
 
-    public function getLastNames() {
-        return $this->lastNames;
+    public function getLastName() {
+        return $this->lastName;
     }
 
-    public function setLastNames($lastNames) {
-        $this->lastNames = $lastNames;
+    public function setLastName($lastName) {
+        $this->lastName = $lastName;
     }
 
     public function getEmail() {

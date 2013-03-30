@@ -33,9 +33,10 @@ class Controller {
         $previousRegister = $this->dao->getPlayerByDocument($document);
         $date = date('Y-m-d H:i:s');
         $player->setLastDate($date);
-        if(property_exists($previousRegister, "Error")){ //El jugador no existe en la base de datos
+        if($previousRegister == null){ //El jugador no existe en la base de datos
             return $this->dao->createPlayer($player);
         }else{
+            $player->setId($previousRegister->getId());
             $player->setPlayCount($previousRegister->getPlayCount() + 1);
             if($previousRegister->getScore() > $player->getScore()){
                 $player->setScore($previousRegister->getScore());
@@ -48,6 +49,14 @@ class Controller {
         return $this->dao->getPlayers();
     }
 
+    public function getPlayerRanking($document){
+        $register = $this->dao->getPlayerByDocument($document);
+        if($register != null){
+            return $this->dao->getPlayerRanking($register);
+        }else{
+            return getErrorArray("03", "El jugador no esta en el ranking");
+        }
+    }
     // </editor-fold>
 }
 
