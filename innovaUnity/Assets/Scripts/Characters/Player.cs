@@ -12,6 +12,7 @@ public class Player : MonoBehaviour {
 	private Vector3 moveDirection = Vector3.zero;
 	private bool jumped;
 	private bool segway;
+	private bool justUsedSegway;
 	private float move;
 	private int countCrashed;
 	private int countCrashedSegway;
@@ -29,6 +30,7 @@ public class Player : MonoBehaviour {
 		countCrashed = 0;
 		controller = GetComponent<CharacterController>();
 		segway = false;
+		justUsedSegway = false;
 		levelController = GameObject.Find("GameCtrl");
 		
 	}
@@ -76,15 +78,15 @@ public class Player : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider c){
-		
 		if (c.tag == "Obstacle"){
-			if(!segway){
+			if(!segway && !justUsedSegway){
 				countCrashed++;
 				moveDirection.x -= 3000 * Time.deltaTime;
 			} else {
 				Destroy(segwayGO, 0.3f);
 				segway = false;
-				transform.Translate(0, 4, 0);
+				justUsedSegway = true;
+				transform.Translate(0, 0, 2);
 			}
 		}
 		if (c.tag == "Segway"){
