@@ -27,7 +27,7 @@ public class Scenery : MonoBehaviour {
 		speed = gameControl.GetComponent<LevelCtrl>().gameSpeed * 0.8f;
 		maxSpeed = gameControl.GetComponent<LevelCtrl>().maxGameSpeed * 0.9f;
 		sceneryLength = gameControl.GetComponent<LevelCtrl>().sceneryLength;
-		buildingCount = gameControl.GetComponent<LevelCtrl>().backgrounds.Count;
+		buildingCount = gameControl.GetComponent<LevelCtrl>().objectGenerator.GetComponent<ObjectGenerator>().backgrounds.Count;
 //		timesSwapped = 0;
 //		current = new List<GameObject>();
 //		timeElapsed = 0;

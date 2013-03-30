@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class LevelCtrl : MonoBehaviour {
 	
-	private LevelCtrl levelCtrl;
-	public LevelCtrl Instance{
+	private static LevelCtrl levelCtrl;
+	public static LevelCtrl Instance{
 		get{
 			if(levelCtrl.Equals(null)){
 				levelCtrl = new LevelCtrl();
@@ -22,13 +22,13 @@ public class LevelCtrl : MonoBehaviour {
 	public float gameSpeed;
 	public float maxGameSpeed;
 	
-	public GameObject obstacleGenerator;
+	public GameObject objectGenerator;
 	
-	public List<GameObject> backgrounds;
-	public List<GameObject> sky;
-	
-	public GameObject player;
-	public GameObject crowd;
+//	public List<GameObject> backgrounds;
+//	public List<GameObject> sky;
+//	
+//	public GameObject player;
+//	public GameObject crowd;
 	
 	private float timeElapsed;
 	
@@ -37,26 +37,26 @@ public class LevelCtrl : MonoBehaviour {
 	}
 	
 	void Start(){
-		for(int i = 0; i < sky.Count; i++){
-			Instantiate(sky[i], new Vector3(sky[i].transform.position.x + (i * skyLength), sky[i].transform.position.y + 20, sky[i].transform.position.z), 
-				sky[i].transform.rotation);
-		}
-		
-		for(int i = 0; i < backgrounds.Count; i++){
-				Instantiate(backgrounds[i], new Vector3(transform.position.x + (i * sceneryLength), 
-				(transform.position.y + sceneryHeight / 2.1f), transform.position.z), backgrounds[i].transform.rotation);
-		}
-		Instantiate(player, player.transform.position, player.transform.rotation);
-
-		Instantiate(crowd, crowd.transform.position, crowd.transform.rotation);
-		Instantiate(obstacleGenerator, new Vector3(transform.position.x + sceneryLength, obstacleGenerator.transform.position.y, 
-			obstacleGenerator.transform.position.z), player.transform.rotation);
-
+//		for(int i = 0; i < sky.Count; i++){
+//			Instantiate(sky[i], new Vector3(sky[i].transform.position.x + (i * skyLength), sky[i].transform.position.y + 20, sky[i].transform.position.z), 
+//				sky[i].transform.rotation);
+//		}
+//		
+//		for(int i = 0; i < backgrounds.Count; i++){
+//				Instantiate(backgrounds[i], new Vector3(transform.position.x + (i * sceneryLength), 
+//				(backgrounds[i].transform.position.y + sceneryHeight / 2.1f), backgrounds[i].transform.position.z), backgrounds[i].transform.rotation);
+//		}
+//		
+//		Instantiate(player, player.transform.position, player.transform.rotation);
+//
+//		Instantiate(crowd, crowd.transform.position, crowd.transform.rotation);
+		Instantiate(objectGenerator, new Vector3(transform.position.x + sceneryLength, objectGenerator.transform.position.y, 
+			objectGenerator.transform.position.z), transform.rotation);
 	}
 	
 	void Update(){
 		if(Time.time >= 40f){
-			Debug.Log("Se acabó'sta mondá");
+			Debug.Log("Se acabo'sta monda");
 		}
 	}
 }
