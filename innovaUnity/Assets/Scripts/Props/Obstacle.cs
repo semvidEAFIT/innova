@@ -44,5 +44,6 @@ public class Obstacle : MonoBehaviour {
 			blink = true;
 			if (audioFile.Length!=0) audio.Play();
 		}
+		
 	}
 }

@@ -35,6 +35,9 @@ public class LevelCtrl : MonoBehaviour {
 	public AudioClip audioGanar;
 	public AudioClip introLoopSegway;
 	public AudioClip LoopSegway;
+	public AudioClip audioFail;
+	
+	
 	
 	private float timeElapsed;
 	
@@ -81,6 +84,10 @@ public class LevelCtrl : MonoBehaviour {
 		}
 	}
 	
+//	void OnGUI () {
+//		
+//	}
+	
 	void PlayLoopPrincipal (){
 		audio.Stop();
 		audio.clip = introLoopPrincipal;
@@ -98,6 +105,12 @@ public class LevelCtrl : MonoBehaviour {
 	public void PlaySegway(){
 		audio.Stop();
 		audio.clip = introLoopSegway;
+		audio.Play();
+	}
+	
+	public void PlayFail() {
+		audio.Stop();
+		audio.clip = audioFail;
 		audio.Play();
 	}
 	
