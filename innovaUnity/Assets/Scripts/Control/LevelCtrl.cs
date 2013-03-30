@@ -30,6 +30,15 @@ public class LevelCtrl : MonoBehaviour {
 //	public GameObject player;
 //	public GameObject crowd;
 	
+	public AudioClip introLoopPrincipal;
+	public AudioClip loopPrincipal;
+	public AudioClip audioGanar;
+	public AudioClip introLoopSegway;
+	public AudioClip LoopSegway;
+	public AudioClip audioFail;
+	
+	
+	
 	private float timeElapsed;
 	
 	void Awake(){
@@ -52,11 +61,58 @@ public class LevelCtrl : MonoBehaviour {
 //		Instantiate(crowd, crowd.transform.position, crowd.transform.rotation);
 		Instantiate(objectGenerator, new Vector3(transform.position.x + sceneryLength, objectGenerator.transform.position.y, 
 			objectGenerator.transform.position.z), transform.rotation);
+		
+		PlayLoopPrincipal();
 	}
 	
 	void Update(){
 		if(Time.time >= 40f){
+			PlayWin();
 			Debug.Log("Se acabo'sta monda");
 		}
+		
+		
+		if (!audio.isPlaying){
+			if (audio.clip==introLoopPrincipal){
+				audio.clip=loopPrincipal;
+				audio.Play();
+			}
+			if (audio.clip==introLoopSegway){
+				audio.clip=LoopSegway;
+				audio.Play();
+			}
+		}
 	}
+	
+//	void OnGUI () {
+//		
+//	}
+	
+	void PlayLoopPrincipal (){
+		audio.Stop();
+		audio.clip = introLoopPrincipal;
+		audio.Play();
+	}
+	
+	void PlayWin(){
+		if (audio.clip != audioGanar) {
+			audio.Stop();
+			audio.clip = audioGanar;
+			audio.Play();
+		}
+	}
+	
+	public void PlaySegway(){
+		audio.Stop();
+		audio.clip = introLoopSegway;
+		audio.Play();
+	}
+	
+	public void PlayFail() {
+		audio.Stop();
+		audio.clip = audioFail;
+		audio.Play();
+	}
+	
+	
 }
