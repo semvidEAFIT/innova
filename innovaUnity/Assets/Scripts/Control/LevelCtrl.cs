@@ -21,7 +21,6 @@ public class LevelCtrl : MonoBehaviour {
 	
 	public float gameSpeed;
 	public float maxGameSpeed;
-	
 	public GameObject objectGenerator;
 	
 //	public List<GameObject> backgrounds;
@@ -36,9 +35,12 @@ public class LevelCtrl : MonoBehaviour {
 	public AudioClip introLoopSegway;
 	public AudioClip LoopSegway;
 	public AudioClip audioFail;
-	
-	
-	
+
+    public GameObject loseScreen;
+    public bool fadeLose = false;
+    public bool won = false;
+    public float fadeDuration = 5.0f;
+    public float elapsedFadeTime = 0.0f;
 	private float timeElapsed;
 	
 	void Awake(){
@@ -67,8 +69,8 @@ public class LevelCtrl : MonoBehaviour {
 	
 	void Update(){
 		if(Time.time >= 40f){
-			PlayWin();
-			Debug.Log("Se acabo'sta monda");
+            WinGame();
+            won = true;
 		}
 		
 		
@@ -82,7 +84,17 @@ public class LevelCtrl : MonoBehaviour {
 				audio.Play();
 			}
 		}
+        if(fadeLose){
+            loseScreen.renderer.material.color = new Color(loseScreen.renderer.material.color.r, loseScreen.renderer.material.color.g, loseScreen.renderer.material.color.b, Mathf.Clamp(Mathf.Lerp(256, 0, elapsedFadeTime /  fadeDuration),0,256));
+            elapsedFadeTime+=Time.deltaTime;
+        }
 	}
+
+    private void WinGame()
+    {
+        PlayWin();
+        Debug.Log("Se acabo'sta monda");
+    }
 	
 //	void OnGUI () {
 //		
@@ -94,12 +106,13 @@ public class LevelCtrl : MonoBehaviour {
 		audio.Play();
 	}
 	
-	void PlayWin(){
+	public IEnumerator PlayWin(){
 		if (audio.clip != audioGanar) {
 			audio.Stop();
 			audio.clip = audioGanar;
 			audio.Play();
 		}
+        yield return new WaitForSeconds(audio.clip.length);
 	}
 	
 	public void PlaySegway(){
@@ -108,11 +121,18 @@ public class LevelCtrl : MonoBehaviour {
 		audio.Play();
 	}
 	
-	public void PlayFail() {
+	public IEnumerator PlayFail() {
 		audio.Stop();
 		audio.clip = audioFail;
 		audio.Play();
+        yield return new WaitForSeconds(audio.clip.length);
 	}
-	
+
+    public void LoseGame() {
+        PlayFail();
+        if(loseScreen != null){
+            loseScreen = (GameObject)GameObject.Instantiate(loseScreen, camera.transform.position + Vector3.forward * 10, Quaternion.identity);
+        }       
+    }
 	
 }
