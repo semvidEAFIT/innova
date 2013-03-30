@@ -30,6 +30,10 @@ public class LevelCtrl : MonoBehaviour {
 	public GameObject player;
 	public GameObject crowd;
 	
+	public AudioClip introLoopPrincipal;
+	public AudioClip loopPrincipal;
+	public AudioClip audioGanar;
+	
 	private float timeElapsed;
 	
 	void Awake(){
@@ -51,12 +55,35 @@ public class LevelCtrl : MonoBehaviour {
 		Instantiate(crowd, crowd.transform.position, crowd.transform.rotation);
 		Instantiate(obstacleGenerator, new Vector3(transform.position.x + sceneryLength, obstacleGenerator.transform.position.y, 
 			obstacleGenerator.transform.position.z), player.transform.rotation);
-
+		
+		PlayLoopPrincipal();
 	}
 	
 	void Update(){
 		if(Time.time >= 40f){
+			PlayWin();
 			Debug.Log("Se acabó'sta mondá");
+		}
+		
+		if (!audio.isPlaying){
+			if (audio.clip==introLoopPrincipal){
+				audio.clip=loopPrincipal;
+				audio.Play();
+			}
+		}
+	}
+	
+	void PlayLoopPrincipal (){
+		audio.Stop();
+		audio.clip = introLoopPrincipal;
+		audio.Play();
+	}
+	
+	void PlayWin(){
+		if (audio.clip != audioGanar) {
+			audio.Stop();
+			audio.clip = audioGanar;
+			audio.Play();
 		}
 	}
 }
