@@ -42,7 +42,7 @@ public class Obstacle : MonoBehaviour {
 		if (c.tag == "Player"){
 			Destroy(this.gameObject, 0.3F);
 			blink = true;
-		}	
-		if (audioFile.Length!=0) audio.Play();
+			if (audioFile.Length!=0) audio.Play();
+		}
 	}
 }
