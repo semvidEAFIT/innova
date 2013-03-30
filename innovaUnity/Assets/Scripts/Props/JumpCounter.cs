@@ -17,7 +17,6 @@ public class JumpCounter : MonoBehaviour {
 		if (other.tag == "Obstacle"){
 			counter++;
 			Destroy(other.gameObject, 3f);
-			Debug.Log(counter);
 		}
 			
 	}

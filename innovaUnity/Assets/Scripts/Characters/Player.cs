@@ -7,6 +7,7 @@ public class Player : MonoBehaviour {
 	public float gravity = 1.0f;
 	
 	public GameObject segwayGO;
+	private GameObject levelController;
 	
 	private Vector3 moveDirection = Vector3.zero;
 	private bool jumped;
@@ -27,6 +28,8 @@ public class Player : MonoBehaviour {
 		countCrashed = 0;
 		controller = GetComponent<CharacterController>();
 		segway = false;
+		levelController = GameObject.Find("GameCtrl");
+		
 	}
 	
 	// Update is called once per frame
@@ -88,7 +91,7 @@ public class Player : MonoBehaviour {
 			getOnSegway();
 		}
 		if (c.tag == "Crowd"){
-			//die?
+			levelController.GetComponent<LevelCtrl>().PlayFail();
 			Destroy(this.gameObject);
 			c.gameObject.GetComponent<Crowd>().accelerateCrowd();
 		}
@@ -112,6 +115,7 @@ public class Player : MonoBehaviour {
 			transform.Translate(0f, 0f, -4f);
 			segwayGO.transform.parent = this.transform;
 			segway = true;
+			levelController.GetComponent<LevelCtrl>().PlaySegway();
 		}
 	}
 }
