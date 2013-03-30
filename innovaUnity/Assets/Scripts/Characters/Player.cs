@@ -4,9 +4,14 @@ using System.Collections;
 public class Player : MonoBehaviour {
 
 	public float jumpSpeed = 60.0f;
-	public float gravity = 1.0F;
+	public float gravity = 1.0f;
+	
+	public GameObject segwayGO;
+	private GameObject levelController;
+	
 	private Vector3 moveDirection = Vector3.zero;
 	private bool jumped;
+	private bool segway;
 	private float move;
 	private int countCrashed;
 	private CharacterController controller;
@@ -19,6 +24,9 @@ public class Player : MonoBehaviour {
 		jumped = false;
 		countCrashed = 0;
 		controller = GetComponent<CharacterController>();
+		segway = false;
+		levelController = GameObject.Find("GameCtrl");
+		
 	}
 	
 	// Update is called once per frame
@@ -43,8 +51,8 @@ public class Player : MonoBehaviour {
 		
 		
 		
-		if (transform.position.x < -30 && countCrashed==1) {
-			moveDirection.x=0;
+		if (transform.position.x < -30 && countCrashed == 1) {
+			moveDirection.x = 0;
 		}
 	
 		
@@ -52,14 +60,11 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.DownArrow)){
 			controller.radius=controller.radius/2;
 			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z+ 2.5f);
-			
 		}
 		
 		if(Input.GetKeyUp(KeyCode.DownArrow)){
-				
-			controller.radius = controller.radius*2;
+			controller.radius = controller.radius * 2;
 			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z - 2.5f);
-			
 		}
 		controller.Move(moveDirection * Time.deltaTime);
 		
@@ -69,13 +74,17 @@ public class Player : MonoBehaviour {
 		
 		if (c.tag == "Obstacle"){
 			//destroy obstacle, reset jumpcounter, get closer to crowd
-			countCrashed++;
-			moveDirection.x -= 3000 * Time.deltaTime;
+			if(!segway){
+				countCrashed++;
+				moveDirection.x -= 3000 * Time.deltaTime;
+			}
 		}
 		if (c.tag == "Segway"){
-			if(Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)){
-				Debug.Log("segway yall");
-				c.gameObject.transform.parent = this.transform.parent;
+			if((Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)) && !segway){
+				segwayGO = Instantiate(segwayGO, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation) as GameObject;
+				transform.Translate(0f, 0f, -0f);
+				segwayGO.transform.parent = this.transform;
+				segway = true;
 			}
 		}
 		if (c.tag == "Crowd"){
@@ -86,18 +95,25 @@ public class Player : MonoBehaviour {
 	}
 	
 	void OnTriggerStay(Collider c){
-		if (c.tag == "Segway"){
-			if(Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)){
-				Debug.Log("segway yall");
-				c.gameObject.transform.parent = this.transform.parent;
+		if(c.tag == "Segway"){
+			if((Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)) && !segway){
+				segwayGO = Instantiate(segwayGO, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation) as GameObject;
+				transform.Translate(0f, 0f, -0f);
+				segwayGO.transform.parent = this.transform;
+				segway = true;
+				levelController.gameObject.GetComponent<LevelCtrl>().PlaySegway();
 			}
 		}
 	}
 	
 	void OnTriggerExit(Collider c){
 		if (c.tag == "Segway"){
-			if(Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)){
-				Debug.Log("segway yall");
+			if((Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)) && !segway){
+				segwayGO = Instantiate(segwayGO, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation) as GameObject;
+				transform.Translate(0f, 0f, -0f);
+				segwayGO.transform.parent = this.transform;
+				segway = true;
+				levelController.gameObject.GetComponent<LevelCtrl>().PlaySegway();
 			}
 		}
 	}

@@ -15,9 +15,10 @@ public class Obstacle : MonoBehaviour {
 		timer=0;
 		if (transform.childCount>0) hasChild=true;
 		else hasChild=false;
-		
-		AudioClip fileToLoad = audioFile[Random.Range(0, audioFile.Length)];
-		audio.clip = fileToLoad;
+		if (audioFile.Length!=0){
+			AudioClip fileToLoad = audioFile[Random.Range(0, audioFile.Length)];
+			audio.clip = fileToLoad;
+		}
 	}
 	
 	// Update is called once per frame
@@ -41,7 +42,7 @@ public class Obstacle : MonoBehaviour {
 		if (c.tag == "Player"){
 			Destroy(this.gameObject, 0.3F);
 			blink = true;
-			audio.Play();
+			if (audioFile.Length!=0) audio.Play();
 		}
 	}
 }

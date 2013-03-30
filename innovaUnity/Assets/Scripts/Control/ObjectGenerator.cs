@@ -8,29 +8,52 @@ public class ObjectGenerator : MonoBehaviour{
 	public GameObject segwayGO;
 	private List<GameObject> current;
 	
+	public float sceneryLength;
+	public float sceneryHeight;
+	
+	public float skyLength;
+	
+	public float gameSpeed;
+	public float maxGameSpeed;
+	
+	public List<GameObject> backgrounds;
+	public List<GameObject> sky;
+	
+	public GameObject player;
+	public GameObject crowd;
+	
 	private float iniTime;
 	
 	private float distanceRun;
-	private float speed;
-	
-	private float sceneryLength;
-	
-	private bool segway, segwayUsed;
+		
+	private bool segwayUsed;
 	
 	void Start(){
 		distanceRun = 0f;
-		speed = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelCtrl>().maxGameSpeed;
 		
 		iniTime = 0f;
 		current = new List<GameObject>();
-		sceneryLength = GameObject.FindGameObjectWithTag("GameController").GetComponent<LevelCtrl>().sceneryLength;
 		
 		segwayUsed = false;
+		
+		Instantiate(player, player.transform.position, player.transform.rotation);
+
+		Instantiate(crowd, crowd.transform.position, crowd.transform.rotation);
+		
+		for(int i = 0; i < sky.Count; i++){
+			Instantiate(sky[i], new Vector3(sky[i].transform.position.x + (i * skyLength), sky[i].transform.position.y + 20, sky[i].transform.position.z), 
+				sky[i].transform.rotation);
+		}
+		
+		for(int i = 0; i < backgrounds.Count; i++){
+				Instantiate(backgrounds[i], new Vector3(transform.position.x + (i * sceneryLength), 
+				(backgrounds[i].transform.position.y + sceneryHeight / 1.8f), backgrounds[i].transform.position.z), backgrounds[i].transform.rotation);
+		}
 		
 	}
 	
 	void Update(){
-		distanceRun = Time.time * speed;
+		distanceRun = Time.time * gameSpeed;
 		
 		if(Time.time - iniTime >= 1f){
 			createObstacles();
@@ -38,7 +61,7 @@ public class ObjectGenerator : MonoBehaviour{
 		}
 		
 		//CAMBIAR "20" A UNA VARIABLE
-		if(distanceRun >= 5 && !segwayUsed){
+		if(distanceRun >= 3 && !segwayUsed){
 			createSegway();
 		}
 	}

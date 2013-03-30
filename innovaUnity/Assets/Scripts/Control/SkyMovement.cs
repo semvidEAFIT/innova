@@ -12,7 +12,7 @@ public class SkyMovement : MonoBehaviour {
 	void Start () {
 		gameControl = GameObject.FindGameObjectWithTag("GameController");
 		speed = gameControl.GetComponent<LevelCtrl>().gameSpeed * 0.2f;
-		skyCount = gameControl.GetComponent<LevelCtrl>().sky.Count;
+		skyCount = gameControl.GetComponent<LevelCtrl>().objectGenerator.GetComponent<ObjectGenerator>().sky.Count;
 		skyLength = gameControl.GetComponent<LevelCtrl>().skyLength;
 	}
 	

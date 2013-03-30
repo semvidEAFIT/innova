@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bf7488913c1f5814588b49c0b2c0cdb3
+guid: f8f9d8414f2da8b4d8bffa194490a69e
 TextureImporter:
   serializedVersion: 2
   mipmaps:
@@ -34,6 +34,6 @@ TextureImporter:
   buildTargetSettings:
   - buildTarget: Standalone
     maxTextureSize: 1024
-    textureFormat: -3
+    textureFormat: -1
     compressionQuality: 50
   userData: 
