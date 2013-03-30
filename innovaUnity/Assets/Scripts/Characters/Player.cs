@@ -4,7 +4,7 @@ using System.Collections;
 public class Player : MonoBehaviour {
 
 	public float jumpSpeed = 60.0f;
-	public float gravity = 1.0F;
+	public float gravity = 1.0f;
 	
 	public GameObject segwayGO;
 	
