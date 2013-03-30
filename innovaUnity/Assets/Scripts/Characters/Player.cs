@@ -13,6 +13,7 @@ public class Player : MonoBehaviour {
 	private bool segway;
 	private float move;
 	private int countCrashed;
+	private int countCrashedSegway;
 	private CharacterController controller;
 	private float height;
 	private float segwayHeight;
@@ -52,15 +53,11 @@ public class Player : MonoBehaviour {
 				controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
 				jumped = false;
 			}
-		}
-		
-		
+		}		
 		
 		if (transform.position.x < -30 && countCrashed == 1) {
 			moveDirection.x = 0;
 		}
-	
-		
 		
         if (Input.GetKeyDown(KeyCode.DownArrow)){
 			controller.radius=controller.radius/2;
@@ -78,10 +75,13 @@ public class Player : MonoBehaviour {
 	void OnTriggerEnter(Collider c){
 		
 		if (c.tag == "Obstacle"){
-			//destroy obstacle, reset jumpcounter, get closer to crowd
 			if(!segway){
 				countCrashed++;
 				moveDirection.x -= 3000 * Time.deltaTime;
+			} else {
+				Destroy(segwayGO, 0.3f);
+				segway = false;
+				transform.Translate(0, 4, 0);
 			}
 		}
 		if (c.tag == "Segway"){

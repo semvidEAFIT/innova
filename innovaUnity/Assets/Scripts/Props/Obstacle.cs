@@ -28,7 +28,7 @@ public class Obstacle : MonoBehaviour {
 					}
 				}
 				else renderer.enabled = !renderer.enabled;
-				timer=0;
+				timer = 0;
 			}
 		}
 	}
@@ -37,7 +37,6 @@ public class Obstacle : MonoBehaviour {
 		if (c.tag == "Player"){
 			Destroy(this.gameObject, 0.3F);
 			blink = true;
-		}
-		
+		}	
 	}
 }
