@@ -41,8 +41,10 @@ public class Obstacle : MonoBehaviour {
 	void OnTriggerEnter (Collider c) {
 		if (c.tag == "Player"){
 			Destroy(this.gameObject, 0.3F);
-			blink = true;
-		}	
+			if(this.gameObject.tag != "Segway"){
+				blink = true;
+			}
+		}
 		if (audioFile.Length!=0) audio.Play();
 	}
 }

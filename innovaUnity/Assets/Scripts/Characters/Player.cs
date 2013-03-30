@@ -12,6 +12,7 @@ public class Player : MonoBehaviour {
 	private Vector3 moveDirection = Vector3.zero;
 	private bool jumped;
 	private bool segway;
+	private bool blink;
 	private bool justUsedSegway;
 	private float move;
 	private int countCrashed;
@@ -21,24 +22,30 @@ public class Player : MonoBehaviour {
 	private float segwayHeight;
 	private float currentHeight;
 	
+	private float timer;
+	
 	// Use this for initialization
 	void Start () {
 		height = transform.position.y;
 		segwayHeight = height + 4;
 		move = 0.0001f;
 		jumped = false;
+		timer = 0;
 		countCrashed = 0;
 		controller = GetComponent<CharacterController>();
 		segway = false;
 		justUsedSegway = false;
-		levelController = GameObject.Find("GameCtrl");
-		
+		levelController = GameObject.Find("GameCtrl");	
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		transform.Translate(0, move, 0);
 		move *= -1;
+		
+		if(segwayGO == null){
+			segway = false;
+		}
 		
 		if(Input.GetKeyDown(KeyCode.Space) && !jumped){
 			moveDirection.y = jumpSpeed;
@@ -58,7 +65,7 @@ public class Player : MonoBehaviour {
 				controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
 				jumped = false;
 			}
-		}		
+		}
 		
 		if (transform.position.x < -30 && countCrashed == 1) {
 			moveDirection.x = 0;
@@ -74,19 +81,17 @@ public class Player : MonoBehaviour {
 			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z - 2.5f);
 		}
 		controller.Move(moveDirection * Time.deltaTime);
-		
 	}
 	
 	void OnTriggerEnter(Collider c){
 		if (c.tag == "Obstacle"){
-			if(!segway && !justUsedSegway){
+			if(!segway){
 				countCrashed++;
 				moveDirection.x -= 3000 * Time.deltaTime;
 			} else {
-				Destroy(segwayGO, 0.3f);
-				segway = false;
-				justUsedSegway = true;
-				transform.Translate(0, 0, 2);
+				Destroy(segwayGO.gameObject);
+				moveDirection.y = jumpSpeed;
+				jumped = true;
 			}
 		}
 		if (c.tag == "Segway"){
