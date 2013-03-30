@@ -5,6 +5,7 @@ public class Player : MonoBehaviour {
 
 	public float jumpSpeed = 60.0f;
 	public float gravity = 1.0F;
+	
 	private Vector3 moveDirection = Vector3.zero;
 	private bool jumped;
 	private float move;
@@ -74,8 +75,6 @@ public class Player : MonoBehaviour {
 		}
 		if (c.tag == "Segway"){
 			if(Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)){
-				Debug.Log("segway yall");
-				c.gameObject.transform.parent = this.transform.parent;
 			}
 		}
 		if (c.tag == "Crowd"){
@@ -88,8 +87,6 @@ public class Player : MonoBehaviour {
 	void OnTriggerStay(Collider c){
 		if (c.tag == "Segway"){
 			if(Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)){
-				Debug.Log("segway yall");
-				c.gameObject.transform.parent = this.transform.parent;
 			}
 		}
 	}
@@ -97,7 +94,7 @@ public class Player : MonoBehaviour {
 	void OnTriggerExit(Collider c){
 		if (c.tag == "Segway"){
 			if(Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)){
-				Debug.Log("segway yall");
+
 			}
 		}
 	}
