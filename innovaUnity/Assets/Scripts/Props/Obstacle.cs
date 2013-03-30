@@ -33,7 +33,7 @@ public class Obstacle : MonoBehaviour {
 					}
 				}
 				else renderer.enabled = !renderer.enabled;
-				timer=0;
+				timer = 0;
 			}
 		}
 	}
@@ -44,6 +44,5 @@ public class Obstacle : MonoBehaviour {
 			blink = true;
 			if (audioFile.Length!=0) audio.Play();
 		}
-		
 	}
 }
