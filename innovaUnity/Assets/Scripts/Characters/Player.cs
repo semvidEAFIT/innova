@@ -21,6 +21,8 @@ public class Player : MonoBehaviour {
 	private float segwayHeight;
 	private float currentHeight;
 	
+	private Sprite animation;
+	
 	public AudioClip jump;
 	public AudioClip slide;
 	public AudioClip fall;
@@ -36,7 +38,11 @@ public class Player : MonoBehaviour {
 		segway = false;
 		justUsedSegway = false;
 		levelController = GameObject.Find("GameCtrl");
+		animation= GetComponent<Sprite>();
 		
+		animation.index=0;
+		animation.currentRow=3;
+		animation.loop=true;
 	}
 	
 	// Update is called once per frame
@@ -47,6 +53,10 @@ public class Player : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.Space) && !jumped){
 			moveDirection.y = jumpSpeed;
 			jumped = true;
+			
+			animation.loop=false;
+			animation.index=0;
+			animation.currentRow=2;
 			
 			//sound
 			audio.Stop();
@@ -67,6 +77,10 @@ public class Player : MonoBehaviour {
 				controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
 				jumped = false;
 				
+				animation.index=0;
+				animation.currentRow=3;
+				animation.loop=true;
+				
 				//sound
 				audio.Stop();
 				audio.clip = fall;
@@ -82,6 +96,9 @@ public class Player : MonoBehaviour {
 			controller.radius=controller.radius/2;
 			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z + 2.5f);
 			
+			animation.loop=false;
+			animation.currentRow=1;
+			
 			//sound
 			audio.Stop();
 			audio.clip = slide;
@@ -92,6 +109,11 @@ public class Player : MonoBehaviour {
 		if(Input.GetKeyUp(KeyCode.DownArrow)){
 			controller.radius = controller.radius * 2;
 			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z - 2.5f);
+			
+			animation.loop=true;
+			animation.index=0;
+			animation.currentRow=3;
+			
 			audio.loop=false;
 			audio.Stop ();
 		}

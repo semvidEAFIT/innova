@@ -76,10 +76,12 @@ public class LevelCtrl : MonoBehaviour {
 			if (audio.clip==introLoopPrincipal){
 				audio.clip=loopPrincipal;
 				audio.Play();
+				audio.loop=true;
 			}
 			if (audio.clip==introLoopSegway){
 				audio.clip=LoopSegway;
 				audio.Play();
+				audio.loop=true;
 			}
 		}
 	}
@@ -89,6 +91,7 @@ public class LevelCtrl : MonoBehaviour {
 //	}
 	
 	void PlayLoopPrincipal (){
+		audio.loop=false;
 		audio.Stop();
 		audio.clip = introLoopPrincipal;
 		audio.Play();
@@ -96,6 +99,7 @@ public class LevelCtrl : MonoBehaviour {
 	
 	void PlayWin(){
 		if (audio.clip != audioGanar) {
+			audio.loop=false;
 			audio.Stop();
 			audio.clip = audioGanar;
 			audio.Play();
@@ -103,12 +107,14 @@ public class LevelCtrl : MonoBehaviour {
 	}
 	
 	public void PlaySegway(){
+		audio.loop=false;
 		audio.Stop();
 		audio.clip = introLoopSegway;
 		audio.Play();
 	}
 	
 	public void PlayFail() {
+		audio.loop=false;
 		audio.Stop();
 		audio.clip = audioFail;
 		audio.Play();
