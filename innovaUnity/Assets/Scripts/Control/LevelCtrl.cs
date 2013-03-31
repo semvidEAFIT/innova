@@ -78,10 +78,12 @@ public class LevelCtrl : MonoBehaviour {
 			if (audio.clip==introLoopPrincipal){
 				audio.clip=loopPrincipal;
 				audio.Play();
+				audio.loop=true;
 			}
 			if (audio.clip==introLoopSegway){
 				audio.clip=LoopSegway;
 				audio.Play();
+				audio.loop=true;
 			}
 		}
         if(fadeLose){
@@ -100,34 +102,52 @@ public class LevelCtrl : MonoBehaviour {
 //		
 //	}
 	
-	void PlayLoopPrincipal (){
+	public void PlayLoopPrincipal (){
+		audio.loop=false;
 		audio.Stop();
 		audio.clip = introLoopPrincipal;
 		audio.Play();
 	}
 	
-	public IEnumerator PlayWin(){
-		if (audio.clip != audioGanar) {
-			audio.Stop();
-			audio.clip = audioGanar;
-			audio.Play();
-		}
-        yield return new WaitForSeconds(audio.clip.length);
-	}
-	
 	public void PlaySegway(){
+		audio.loop=false;
 		audio.Stop();
 		audio.clip = introLoopSegway;
 		audio.Play();
 	}
 	
-	public IEnumerator PlayFail() {
-		audio.Stop();
+	
+//	public IEnumerator PlayWin(){
+//		if (audio.clip != audioGanar) {
+//			audio.loop=false;
+//			audio.Stop();
+//			audio.clip = audioGanar;
+//			audio.Play();
+//		}
+//        yield return new WaitForSeconds(audio.clip.length);
+//	}
+//	
+//	public IEnumerator PlayFail() {
+//		audio.loop=false;
+//		audio.clip = audioFail;
+//		audio.Play();
+//        yield return new WaitForSeconds(audio.clip.length);
+//	}
+	
+	public void PlayWin(){
+		if (audio.clip != audioGanar) {
+			audio.loop=false;
+			audio.Stop();
+			audio.clip = audioGanar;
+			audio.Play();
+		}
+	}
+	public void PlayFail() {
+		audio.loop=false;
 		audio.clip = audioFail;
 		audio.Play();
-        yield return new WaitForSeconds(audio.clip.length);
 	}
-
+	
     public void LoseGame() {
         PlayFail();
         if(loseScreen != null){
