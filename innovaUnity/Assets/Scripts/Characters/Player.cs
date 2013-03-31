@@ -21,8 +21,10 @@ public class Player : MonoBehaviour {
 	private float height;
 	private float segwayHeight;
 	private float currentHeight;
-	
 	private float timer;
+	public AudioClip jump;
+	public AudioClip slide;
+	public AudioClip fall;
 	
 	// Use this for initialization
 	void Start () {
@@ -50,6 +52,11 @@ public class Player : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.Space) && !jumped){
 			moveDirection.y = jumpSpeed;
 			jumped = true;
+			
+			//sound
+			audio.Stop();
+			audio.clip = jump;
+			audio.Play();
 		}
 		
 		if(jumped){
@@ -64,6 +71,11 @@ public class Player : MonoBehaviour {
 				moveDirection.y = 0;
 				controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
 				jumped = false;
+				
+				//sound
+				audio.Stop();
+				audio.clip = fall;
+				audio.Play();
 			}
 		}
 		
@@ -74,11 +86,19 @@ public class Player : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.DownArrow)){
 			controller.radius=controller.radius/2;
 			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z + 2.5f);
+			
+			//sound
+			audio.Stop();
+			audio.clip = slide;
+			audio.Play();
+			audio.loop=true;
 		}
 		
 		if(Input.GetKeyUp(KeyCode.DownArrow)){
 			controller.radius = controller.radius * 2;
 			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z - 2.5f);
+			audio.loop=false;
+			audio.Stop ();
 		}
 		controller.Move(moveDirection * Time.deltaTime);
 	}
