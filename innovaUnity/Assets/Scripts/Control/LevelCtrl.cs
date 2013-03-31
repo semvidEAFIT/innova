@@ -109,16 +109,6 @@ public class LevelCtrl : MonoBehaviour {
 		audio.Play();
 	}
 	
-	public IEnumerator PlayWin(){
-		if (audio.clip != audioGanar) {
-			audio.loop=false;
-			audio.Stop();
-			audio.clip = audioGanar;
-			audio.Play();
-		}
-        yield return new WaitForSeconds(audio.clip.length);
-	}
-	
 	public void PlaySegway(){
 		audio.loop=false;
 		audio.Stop();
@@ -126,13 +116,38 @@ public class LevelCtrl : MonoBehaviour {
 		audio.Play();
 	}
 	
-	public IEnumerator PlayFail() {
+	
+//	public IEnumerator PlayWin(){
+//		if (audio.clip != audioGanar) {
+//			audio.loop=false;
+//			audio.Stop();
+//			audio.clip = audioGanar;
+//			audio.Play();
+//		}
+//        yield return new WaitForSeconds(audio.clip.length);
+//	}
+//	
+//	public IEnumerator PlayFail() {
+//		audio.loop=false;
+//		audio.clip = audioFail;
+//		audio.Play();
+//        yield return new WaitForSeconds(audio.clip.length);
+//	}
+	
+	public void PlayWin(){
+		if (audio.clip != audioGanar) {
+			audio.loop=false;
+			audio.Stop();
+			audio.clip = audioGanar;
+			audio.Play();
+		}
+	}
+	public void PlayFail() {
 		audio.loop=false;
 		audio.clip = audioFail;
 		audio.Play();
-        yield return new WaitForSeconds(audio.clip.length);
 	}
-
+	
     public void LoseGame() {
         PlayFail();
         if(loseScreen != null){
