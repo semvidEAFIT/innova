@@ -128,7 +128,6 @@ public class LevelCtrl : MonoBehaviour {
 	
 	public IEnumerator PlayFail() {
 		audio.loop=false;
-		audio.Stop();
 		audio.clip = audioFail;
 		audio.Play();
         yield return new WaitForSeconds(audio.clip.length);

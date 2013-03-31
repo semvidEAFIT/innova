@@ -25,13 +25,13 @@ class Sprite : MonoBehaviour
     }
 	
 	void Update(){
-		counter += Time.deltaTime;
-		if (counter > sum){
-			reverse = !reverse;
-			currentRow = Random.Range(0,(int)spriteSize.y);
-			print (index);
-			counter = 0f;
-		}
+//		counter += Time.deltaTime;
+//		if (counter > sum){
+//			reverse = !reverse;
+//			currentRow = Random.Range(0,(int)spriteSize.y);
+//			print (index);
+//			counter = 0f;
+//		}
 	}
 	/*
 	private void rotateAnimation(Vector3 direction, bool rotation)
