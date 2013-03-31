@@ -158,6 +158,7 @@ public class Player : MonoBehaviour {
 				animation.currentRow=2;
 				animation.index=2;
 				
+				levelController.GetComponent<LevelCtrl>().PlayLoopPrincipal();
 				
 				moveDirection.y = jumpSpeed;
 				jumped = true;

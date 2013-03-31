@@ -14,17 +14,18 @@ class Sprite : MonoBehaviour
     public float fps = 20f;
 	public Vector2 spriteSize; // example 16 columns by 2 rows
 	
-	private float counter;
-	private float sum;
+//	private float counter;
+//	private float sum;
 	
     void Start()
     {
         renderer.materials[materialIndex].SetTextureScale("_MainTex", new Vector2(1f/spriteSize.x,1f/spriteSize.y));
         StartCoroutine(updateTiling());
-		sum = 10f;
+//		sum = 10f;
     }
 	
 	void Update(){
+		// -> lo que causa el bug! <-
 //		counter += Time.deltaTime;
 //		if (counter > sum){
 //			reverse = !reverse;

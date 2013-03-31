@@ -102,7 +102,7 @@ public class LevelCtrl : MonoBehaviour {
 //		
 //	}
 	
-	void PlayLoopPrincipal (){
+	public void PlayLoopPrincipal (){
 		audio.loop=false;
 		audio.Stop();
 		audio.clip = introLoopPrincipal;
