@@ -49,9 +49,9 @@ class Player {
     }
     
     static public function getPlayerObject($object) {
-        if (property_exists($object, "Player")) {
+        /*if (property_exists($object, "Player")) {
             $object = $object->Player;
-        }
+        }*/
         return new Player(
                $object->id, 
                 $object->document, 

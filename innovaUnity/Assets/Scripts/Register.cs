@@ -3,12 +3,14 @@ using System.Collections;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Boomlagoon.JSON;
+using BlowFishCS;
+using System.Text;
 
-public class Register : MonoBehaviour {
+public class Register : MonoBehaviour, IObserver {
 
     private static string serviceURL = "http://localhost/InnovaServer/services/PlayerService.php";
     private string document = "1127235505", name = "Rodrigo", lastNames = "Diaz Bermudez", email = "pericodiaz89@gmail.com", institution = "SemVid EAFIT";
-
+    public WebServiceHelper ws;
     void OnGUI() {
         int groupWidth = Screen.width / 3;
         int groupHeight = Screen.height / 2;
@@ -29,6 +31,7 @@ public class Register : MonoBehaviour {
             //Se debe programar una manera de validar las entradas del usuario quizá usando RegEx
             if (document.Trim() != "" && name.Trim() != "" && lastNames.Trim() != "" && email.Trim() != "" && institution.Trim() != "")
             {
+                Debug.Log("Yeah");
                 registerPlayer();
                 getPlayerRanking();
             }
@@ -38,26 +41,29 @@ public class Register : MonoBehaviour {
 
     private void registerPlayer() {
         Dictionary<string, object> parameters = new Dictionary<string, object>();
-        JSONObject json = generateJsonFormat(document, name, lastNames, email, institution);
-        parameters.Add("Player", json);
-        parameters.Add("Service", PostService.Register);
-        string responseString = WebServiceHelper.callServicePost(serviceURL, parameters);
-        Debug.Log(responseString);    
+        string player = encrypt(generateJsonFormat(document, name, lastNames, email, institution).ToString());
+        parameters.Add("Player", player);
+        parameters.Add("Service", Service.Register);
+        ws.callServicePost(serviceURL, parameters, this);   
+    }
+
+    private string encrypt(string part)
+    {
+        string hexKey = "04B915BA43FEB5B6";
+        BlowFish b = new BlowFish(hexKey);
+        string encryptedData = b.Encrypt_CBC(part);
+        return encryptedData;
     }
 
     private void getPlayerRanking() {
         Dictionary<string, object> parameters = new Dictionary<string, object>();
         parameters.Add("document", document);
-        parameters.Add("Service", GetService.PlayerRanking);
-        string responseString = WebServiceHelper.callServiceGet(serviceURL, parameters);
-        JSONObject responseJson = JSONObject.Parse(responseString);
-        int ranking = int.Parse(responseJson.GetString("ranking"));
-        Debug.Log(ranking); 
+        parameters.Add("Service", Service.PlayerRanking);
+        ws.callServiceGet(serviceURL, parameters, this);
     }
 
     private JSONObject generateJsonFormat(string document, string name, string lastNames, string email, string institution)
     {
-
         JSONObject player = new JSONObject();
         player.Add("id", "");
         player.Add("document", document);
@@ -68,8 +74,6 @@ public class Register : MonoBehaviour {
         player.Add("score", getScore());
         player.Add("playCount", 1);
         player.Add("lastDate", "");
-        
-        
         return player;
     }
 
@@ -78,13 +82,11 @@ public class Register : MonoBehaviour {
         return 42;
     }
 
-    private enum PostService
+    public void UpdateObserver(Observable target)
     {
-        Register
-    }
-
-    private enum GetService
-    { 
-        Ranking, List, PlayerRanking
+        Queue<string> responses = ((WebServiceHelper)target).Responses[this]; 
+        while(responses.Count > 0){
+            Debug.Log(responses.Dequeue());
+        }
     }
 }

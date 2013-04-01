@@ -14,7 +14,14 @@ class PlayerService extends Service{
 
     public function callService() {
         if(Service::checkParamPOST('Player')&&Service::checkParamPOST('Service')){
-            if($_POST['Service'] == "Register")return $this->registerPlayer(json_decode($_POST['Player']));
+            if($_POST['Service'] == "Register"){
+              $ivanddata = $_POST['Player'];
+              $iv = substr($ivanddata, 0, 16);
+              $data = substr($ivanddata, 16);
+              $key = "04B915BA43FEB5B6";
+              $decryptedData = trim(mcrypt_decrypt(MCRYPT_BLOWFISH, hex2bin($key), hex2bin($data), MCRYPT_MODE_CBC, hex2bin($iv)));
+              return $this->registerPlayer(json_decode($decryptedData));
+            }
         }else if(Service::checkParamGET('Service')){
             if($_GET['Service'] == "Ranking" && Service::checkParamGET('topLength')){
                 return $this->getTopPlayers($_GET['topLength']);
@@ -43,6 +50,7 @@ class PlayerService extends Service{
     private function getPlayerRanking($document){
         return array('ranking' => Controller::getInstance()->getPlayerRanking($document));
     }
+    
 }
 
 new PlayerService();
