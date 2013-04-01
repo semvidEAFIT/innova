@@ -83,7 +83,7 @@ public class ObjectGenerator : MonoBehaviour{
 		}
 		
 		//CAMBIAR "20" A UNA VARIABLE
-		if(distanceRun >= 7 && !segwayUsed){
+		if(distanceRun >= 1 && !segwayUsed){
 			createSegway();
 		}
 	}
@@ -107,5 +107,15 @@ public class ObjectGenerator : MonoBehaviour{
 				segwayGO.transform.rotation);
 		}
 		segwayUsed = true;
+	}
+	
+	public void StopObstacles(){
+		foreach (Transform child in transform){
+			if (child.tag!="Crowd"){
+				if (child.tag=="Obstacle")
+					child.GetComponent<Obstacle>().speed = 0;
+				else child.GetComponent<Scenery>().speed = 0;
+			}
+		}
 	}
 }

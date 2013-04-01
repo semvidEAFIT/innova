@@ -148,7 +148,7 @@ public class Player : MonoBehaviour {
 			}
 			
 			audio.loop=false;
-			audio.Stop ();
+			audio.Stop();
 			
 			sliding=false;
 		}
@@ -185,6 +185,10 @@ public class Player : MonoBehaviour {
 		}
 		if(c.tag == "Auditorium"){
 			levelController.GetComponent<LevelCtrl>().WinGame();
+			
+			animation.loop=true;
+			animation.currentRow=0;
+			animation.index=0;
 		}
 	}
 	
@@ -197,6 +201,7 @@ public class Player : MonoBehaviour {
 	void OnTriggerExit(Collider c){
 		if (c.tag == "Segway"){
 			getOnSegway();
+			Destroy(c.gameObject);
 		}
 	}
 	
