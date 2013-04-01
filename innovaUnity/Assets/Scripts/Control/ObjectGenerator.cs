@@ -30,6 +30,8 @@ public class ObjectGenerator : MonoBehaviour{
 		
 	private bool segwayUsed;
 	
+	private bool failed=false;
+	
 	void Start(){
 		distanceRun = 0f;
 		
@@ -68,7 +70,7 @@ public class ObjectGenerator : MonoBehaviour{
 		distanceRun = Time.time * gameSpeed;
 		
 		if(Time.time - iniTime >= 1f){
-			createObstacles();
+			if (!failed) createObstacles();
 			iniTime = Time.time;
 		}
 		
@@ -97,5 +99,16 @@ public class ObjectGenerator : MonoBehaviour{
 				segwayGO.transform.rotation);
 //		}
 		segwayUsed = true;
+	}
+	
+	public void StopObstacles(){
+		failed=true;
+		foreach (Transform child in transform){
+			if (child.tag!="Crowd"){
+				if (child.tag=="Obstacle")
+					child.GetComponent<Obstacle>().speed = 0;
+				else child.GetComponent<Scenery>().speed = 0;
+			}
+		}
 	}
 }
