@@ -70,7 +70,7 @@ public class Player : MonoBehaviour {
 			
 			if (!segway){
 				animation.loop=false;
-				animation.index=2;
+				animation.index=1;
 				animation.currentRow=2;
 			}
 			
@@ -133,9 +133,11 @@ public class Player : MonoBehaviour {
 			controller.radius = controller.radius * 2;
 			controller.center = new Vector3( controller.center.x, controller.center.y, controller.center.z - 2.5f);
 			
-			animation.loop=true;
-			animation.index=0;
-			animation.currentRow=3;
+			if (!segway){
+				animation.loop=true;
+				animation.index=0;
+				animation.currentRow=3;
+			}
 			
 			audio.loop=false;
 			audio.Stop ();
@@ -190,7 +192,7 @@ public class Player : MonoBehaviour {
 		if((Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)) && !segway){
 			animation.loop=false;
 			animation.currentRow=3;
-			animation.index=1;
+			animation.index=3;
 			
 			segwayGO = Instantiate(segwayGO, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation) as GameObject;
 			transform.Translate(0f, 0f, -4f);
