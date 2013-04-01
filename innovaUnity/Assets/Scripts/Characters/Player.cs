@@ -78,7 +78,7 @@ public class Player : MonoBehaviour {
 			
 			if (!segway){
 				animation.loop=false;
-				animation.index=1;
+				animation.index=3;
 				animation.currentRow=2;
 			}
 			
