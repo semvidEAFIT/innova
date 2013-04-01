@@ -30,6 +30,8 @@ public class ObjectGenerator : MonoBehaviour{
 		
 	private bool segwayUsed;
 	
+	private bool failed=false;
+	
 	void Start(){
 		distanceRun = 0f;
 		
@@ -38,9 +40,9 @@ public class ObjectGenerator : MonoBehaviour{
 		
 		segwayUsed = false;
 		if(CharacterSelection.IsBoy){
-			Instantiate(playerBoy, playerBoy.transform.position, playerBoy.transform.rotation);
-		}else{
 			Instantiate(playerGirl, playerGirl.transform.position, playerGirl.transform.rotation);
+		}else{
+			Instantiate(playerBoy, playerBoy.transform.position, playerBoy.transform.rotation);
 		}
 		crowd = Instantiate(crowd, crowd.transform.position, crowd.transform.rotation) as GameObject;
 		crowd.transform.parent = this.transform;
@@ -68,12 +70,12 @@ public class ObjectGenerator : MonoBehaviour{
 		distanceRun = Time.time * gameSpeed;
 		
 		if(Time.time - iniTime >= 1f){
-			createObstacles();
+			if (!failed) createObstacles();
 			iniTime = Time.time;
 		}
 		
 		//CAMBIAR "20" A UNA VARIABLE
-		if(distanceRun >= 7 && !segwayUsed){
+		if(distanceRun >= 0.8 && !segwayUsed){
 			createSegway();
 		}
 	}
@@ -92,10 +94,21 @@ public class ObjectGenerator : MonoBehaviour{
 	}
 	
 	void createSegway(){
-		if(Mathf.RoundToInt(Random.Range(0, 5)) <= 2){
+//		if(Mathf.RoundToInt(Random.Range(0, 5)) <= 2){
 			Instantiate(segwayGO, new Vector3(transform.position.x + sceneryLength, transform.position.y, segwayGO.transform.position.z), 
 				segwayGO.transform.rotation);
-		}
+//		}
 		segwayUsed = true;
+	}
+	
+	public void StopObstacles(){
+		failed=true;
+		foreach (Transform child in transform){
+			if (child.tag!="Crowd"){
+				if (child.tag=="Obstacle")
+					child.GetComponent<Obstacle>().speed = 0;
+				else child.GetComponent<Scenery>().speed = 0;
+			}
+		}
 	}
 }
