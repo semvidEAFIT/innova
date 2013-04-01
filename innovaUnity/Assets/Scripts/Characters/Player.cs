@@ -75,14 +75,19 @@ public class Player : MonoBehaviour {
 		}
 		
 		if(Input.GetKeyDown(KeyCode.Space) && !jumped && !sliding){
-			moveDirection.y = jumpSpeed;
-			jumped = true;
-			
 			if (!segway){
 				animation.loop=false;
 				animation.index=1;
 				animation.currentRow=2;
+				moveDirection.y = jumpSpeed;
+			} else {
+				moveDirection.y = jumpSpeed*2;
 			}
+			
+			
+			jumped = true;
+			
+			
 			
 			//sound
 			audio.Stop();
@@ -97,7 +102,8 @@ public class Player : MonoBehaviour {
 				currentHeight = height;
 			}
 			if (moveDirection.y >= 0 || transform.position.y+moveDirection.y * Time.deltaTime > currentHeight){
-				moveDirection.y -= gravity;
+				if (!segway) moveDirection.y -= gravity;
+				else moveDirection.y -= gravity*2;
 			}else{
 				moveDirection.y = 0;
 				controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
