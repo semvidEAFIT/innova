@@ -70,7 +70,7 @@ public class LevelCtrl : MonoBehaviour {
 
     public void WinGame()
     {
-        PlayWin();
+        PlayWin();		
 		Destroy(this.objectGenerator);
 		setSpeedToZero();
 		DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Player"));
@@ -137,6 +137,9 @@ public class LevelCtrl : MonoBehaviour {
 	
 	public void setSpeedToZero(){
 		GameObject.FindGameObjectWithTag("Auditorium").GetComponent<Scenery>().speed = 0f;
+		
+		objectGenerator.GetComponent<ObjectGenerator>().StopObstacles();
+		
 		GameObject[] skies = GameObject.FindGameObjectsWithTag("Sky");
 		for(int i = 0; i < skies.Length; i++){
 			skies[i].GetComponent<SkyMovement>().speed = 0;
