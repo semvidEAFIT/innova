@@ -63,6 +63,8 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+		Debug.Log(Input.GetKeyDown(KeyCode.RightControl));
+		
 		score += (100 + streak * 10) * Time.deltaTime;
 		
 		transform.Translate(0, move, 0);
@@ -163,7 +165,7 @@ public class Player : MonoBehaviour {
 				moveDirection.x -= 3000 * Time.deltaTime;
 			} else {
 				Destroy(segwayGO.gameObject);
-				segway=false;
+				segway = false;
 				
 				animation.loop=false;
 				animation.currentRow=2;
@@ -176,7 +178,9 @@ public class Player : MonoBehaviour {
 			}
 		}
 		if (c.tag == "Segway"){
-			getOnSegway();
+			if(Input.GetKeyDown(KeyCode.RightControl) && !segway) {
+				getOnSegway();
+			}
 		}
 		if (c.tag == "Crowd"){
 			levelController.GetComponent<LevelCtrl>().LoseGame();
@@ -190,30 +194,33 @@ public class Player : MonoBehaviour {
 	
 	void OnTriggerStay(Collider c){
 		if(c.tag == "Segway"){
-			getOnSegway();
+			if(Input.GetKeyDown(KeyCode.RightControl) && !segway) {
+				getOnSegway();
+			}
 		}
 	}
 	
 	void OnTriggerExit(Collider c){
 		if (c.tag == "Segway"){
-			getOnSegway();
+			if(Input.GetKeyDown(KeyCode.RightControl) && !segway) {
+				getOnSegway();
+			}
 		}
 	}
 	
 	void getOnSegway(){
-		if((Input.GetKeyDown(KeyCode.RightControl) || Input.GetKeyDown(KeyCode.LeftControl)) && !segway){
-			animation.loop=false;
-			animation.currentRow=3;
-			animation.index=3;
-			
-			segwayGO = Instantiate(segwayGO, new Vector3(transform.position.x, transform.position.y, transform.position.z), 
-				transform.rotation) as GameObject;
-			transform.Translate(0f, 0f, -4f);
-			segwayGO.transform.parent = this.transform;
-			segway = true;
-			segwayUsed = true;
-			levelController.GetComponent<LevelCtrl>().PlaySegway();
-		}
+		Debug.Log("SEGWAY");
+		animation.loop=false;
+		animation.currentRow=3;
+		animation.index=3;
+		
+		segwayGO = Instantiate(segwayGO, new Vector3(transform.position.x, transform.position.y, transform.position.z), 
+			transform.rotation) as GameObject;
+		transform.Translate(0f, 0f, -4f);
+		segwayGO.transform.parent = this.transform;
+		segway = true;
+		segwayUsed = true;
+		levelController.GetComponent<LevelCtrl>().PlaySegway();
 	}
 	
 	public bool getSegwayUsed(){
