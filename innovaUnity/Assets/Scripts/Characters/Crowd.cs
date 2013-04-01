@@ -17,7 +17,7 @@ public class Crowd : MonoBehaviour {
 	}
 	
 	public void accelerateCrowd(){
-		speed=-1f * Time.deltaTime;
+		speed=-1f;
 		audio.Play();
 	}
 }

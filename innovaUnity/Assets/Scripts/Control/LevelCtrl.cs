@@ -73,7 +73,8 @@ public class LevelCtrl : MonoBehaviour {
         PlayWin();
 		Destroy(this.objectGenerator);
 		setSpeedToZero();
-		getScore();
+		DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Player"));
+		Application.LoadLevel("Register");
     }
 	
     public void LoseGame() {
@@ -140,12 +141,5 @@ public class LevelCtrl : MonoBehaviour {
 		for(int i = 0; i < skies.Length; i++){
 			skies[i].GetComponent<SkyMovement>().speed = 0;
 		}
-	}
-	
-	private void getScore(){
-		GameObject player = GameObject.FindGameObjectWithTag("Player");
-		float playerScore = player.GetComponent<Player>().getScore();
-
-		Debug.Log(playerScore);
 	}
 }

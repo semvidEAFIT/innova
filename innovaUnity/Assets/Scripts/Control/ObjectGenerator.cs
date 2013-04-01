@@ -21,7 +21,7 @@ public class ObjectGenerator : MonoBehaviour{
 	
 	public GameObject floor;
 	
-	public GameObject player;
+	public GameObject playerBoy, playerGirl;
 	public GameObject crowd;
 	
 	private float iniTime;
@@ -37,9 +37,11 @@ public class ObjectGenerator : MonoBehaviour{
 		current = new List<GameObject>();
 		
 		segwayUsed = false;
-		
-		Instantiate(player, player.transform.position, player.transform.rotation);
-
+		if(CharacterSelection.IsBoy){
+			Instantiate(playerBoy, playerBoy.transform.position, playerBoy.transform.rotation);
+		}else{
+			Instantiate(playerGirl, playerGirl.transform.position, playerGirl.transform.rotation);
+		}
 		crowd = Instantiate(crowd, crowd.transform.position, crowd.transform.rotation) as GameObject;
 		crowd.transform.parent = this.transform;
 		

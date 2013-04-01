@@ -77,9 +77,9 @@ public class Register : MonoBehaviour, IObserver {
         return player;
     }
 
-    private int getScore()
+    private float getScore()
     {
-        return 42;
+        return Player.getScore();
     }
 
     public void UpdateObserver(Observable target)
