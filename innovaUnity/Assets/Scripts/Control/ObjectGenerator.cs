@@ -19,6 +19,8 @@ public class ObjectGenerator : MonoBehaviour{
 	public List<GameObject> backgrounds;
 	public List<GameObject> sky;
 	
+	public List<GameObject> mountains;
+	
 	public GameObject floor;
 	
 	public GameObject playerBoy, playerGirl;
@@ -52,6 +54,14 @@ public class ObjectGenerator : MonoBehaviour{
 				sky[i].transform.rotation);
 		}
 		
+		
+		for(int i = 0; i < mountains.Count; i++){
+			Instantiate(mountains[i], new Vector3(mountains[i].transform.position.x + (i * skyLength), mountains[i].transform.position.y + 29, mountains[i].transform.position.z), 
+				mountains[i].transform.rotation);
+		}
+		
+		
+		
 		for(int i = 0; i < backgrounds.Count - 1; i++){
 			backgrounds[i] = Instantiate(backgrounds[i], new Vector3(transform.position.x + (i * sceneryLength), 
 				(backgrounds[i].transform.position.y + sceneryHeight / 1.8f), backgrounds[i].transform.position.z), 
@@ -73,7 +83,7 @@ public class ObjectGenerator : MonoBehaviour{
 		}
 		
 		//CAMBIAR "20" A UNA VARIABLE
-		if(distanceRun >= 7 && !segwayUsed){
+		if(distanceRun >= 1 && !segwayUsed){
 			createSegway();
 		}
 	}
@@ -97,5 +107,15 @@ public class ObjectGenerator : MonoBehaviour{
 				segwayGO.transform.rotation);
 		}
 		segwayUsed = true;
+	}
+	
+	public void StopObstacles(){
+		foreach (Transform child in transform){
+			if (child.tag!="Crowd"){
+				if (child.tag=="Obstacle")
+					child.GetComponent<Obstacle>().speed = 0;
+				else child.GetComponent<Scenery>().speed = 0;
+			}
+		}
 	}
 }
