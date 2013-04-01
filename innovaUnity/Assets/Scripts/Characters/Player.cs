@@ -10,21 +10,25 @@ public class Player : MonoBehaviour {
 	private GameObject levelController;
 	
 	private Vector3 moveDirection = Vector3.zero;
+	
 	private bool jumped;
 	private bool segway;
+	private bool segwayUsed;
 	private bool blink;
-	private bool justUsedSegway;
-	private float move;
+	
+	private int streak;
 	private int countCrashed;
 	private int countCrashedSegway;
 	private CharacterController controller;
+	
+	private float move;
 	private float height;
 	private float segwayHeight;
 	private float currentHeight;
+	private float timer;
+	private float score;
 	
 	private Sprite animation;
-	
-	private float timer;
 	
 	private bool sliding;
 	
@@ -43,7 +47,7 @@ public class Player : MonoBehaviour {
 		countCrashed = 0;
 		controller = GetComponent<CharacterController>();
 		segway = false;
-		justUsedSegway = false;
+		segwayUsed = false;
 		
 		levelController = GameObject.Find("GameCtrl");
 		animation= GetComponent<Sprite>();
@@ -57,6 +61,9 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
+		score += (100 + streak * 10) * Time.deltaTime;
+		
 		transform.Translate(0, move, 0);
 		move *= -1;
 		
@@ -106,7 +113,7 @@ public class Player : MonoBehaviour {
 			}
 		}
 		
-		if (transform.position.x < -30 && countCrashed == 1) {
+		if (transform.position.x < -25 && countCrashed == 1) {
 			moveDirection.x = 0;
 		}
 		
@@ -117,7 +124,7 @@ public class Player : MonoBehaviour {
 			if (!segway){
 				animation.loop=false;
 				animation.currentRow=1;
-				animation.index=3; //dont ask why...
+				animation.index = 3; //dont ask why...
 			}
 			
 			//sound
@@ -149,6 +156,7 @@ public class Player : MonoBehaviour {
 		if (c.tag == "Obstacle"){
 			if(!segway){
 				countCrashed++;
+				this.GetComponentInChildren<JumpCounter>().resetStreak();
 				moveDirection.x -= 3000 * Time.deltaTime;
 			} else {
 				Destroy(segwayGO.gameObject);
@@ -172,6 +180,9 @@ public class Player : MonoBehaviour {
 			Destroy(this.gameObject);
 			c.gameObject.GetComponent<Crowd>().accelerateCrowd();
 		}
+		if(c.tag == "Auditorium"){
+			levelController.GetComponent<LevelCtrl>().WinGame();
+		}
 	}
 	
 	void OnTriggerStay(Collider c){
@@ -192,12 +203,29 @@ public class Player : MonoBehaviour {
 			animation.currentRow=3;
 			animation.index=1;
 			
-			segwayGO = Instantiate(segwayGO, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation) as GameObject;
+			segwayGO = Instantiate(segwayGO, new Vector3(transform.position.x, transform.position.y, transform.position.z), 
+				transform.rotation) as GameObject;
 			transform.Translate(0f, 0f, -4f);
 			segwayGO.transform.parent = this.transform;
 			segway = true;
+			segwayUsed = true;
 			levelController.GetComponent<LevelCtrl>().PlaySegway();
-
 		}
+	}
+	
+	public bool getSegwayUsed(){
+		return segwayUsed;
+	}
+	
+	public void setStreak(int streak){
+		this.streak = streak;
+	}
+	
+	public float getScore(){
+		int segwayBonus = 0;
+		if(segway){
+			segwayBonus = 0;
+		}
+		return score + segwayBonus;
 	}
 }

@@ -40,7 +40,8 @@ public class ObjectGenerator : MonoBehaviour{
 		
 		Instantiate(player, player.transform.position, player.transform.rotation);
 
-		Instantiate(crowd, crowd.transform.position, crowd.transform.rotation);
+		crowd = Instantiate(crowd, crowd.transform.position, crowd.transform.rotation) as GameObject;
+		crowd.transform.parent = this.transform;
 		
 		Instantiate(floor, floor.transform.position, floor.transform.rotation);
 		
@@ -49,11 +50,16 @@ public class ObjectGenerator : MonoBehaviour{
 				sky[i].transform.rotation);
 		}
 		
-		for(int i = 0; i < backgrounds.Count; i++){
-				Instantiate(backgrounds[i], new Vector3(transform.position.x + (i * sceneryLength), 
-				(backgrounds[i].transform.position.y + sceneryHeight / 1.8f), backgrounds[i].transform.position.z), backgrounds[i].transform.rotation);
+		for(int i = 0; i < backgrounds.Count - 1; i++){
+			backgrounds[i] = Instantiate(backgrounds[i], new Vector3(transform.position.x + (i * sceneryLength), 
+				(backgrounds[i].transform.position.y + sceneryHeight / 1.8f), backgrounds[i].transform.position.z), 
+				backgrounds[i].transform.rotation) as GameObject;
+			backgrounds[i].transform.parent = this.transform;
 		}
 		
+		Instantiate(backgrounds[backgrounds.Count - 1], new Vector3(transform.position.x + ((backgrounds.Count - 1) * sceneryLength), 
+			(backgrounds[backgrounds.Count - 1].transform.position.y + sceneryHeight / 1.8f), backgrounds[backgrounds.Count - 1].transform.position.z),
+			backgrounds[backgrounds.Count - 1].transform.rotation);
 	}
 	
 	void Update(){
@@ -65,7 +71,7 @@ public class ObjectGenerator : MonoBehaviour{
 		}
 		
 		//CAMBIAR "20" A UNA VARIABLE
-		if(distanceRun >= 2 && !segwayUsed){
+		if(distanceRun >= 7 && !segwayUsed){
 			createSegway();
 		}
 	}
@@ -84,10 +90,10 @@ public class ObjectGenerator : MonoBehaviour{
 	}
 	
 	void createSegway(){
-		//if(Mathf.RoundToInt(Random.Range(0, 5)) <= 2){
+		if(Mathf.RoundToInt(Random.Range(0, 5)) <= 2){
 			Instantiate(segwayGO, new Vector3(transform.position.x + sceneryLength, transform.position.y, segwayGO.transform.position.z), 
 				segwayGO.transform.rotation);
-		//}
+		}
 		segwayUsed = true;
 	}
 }

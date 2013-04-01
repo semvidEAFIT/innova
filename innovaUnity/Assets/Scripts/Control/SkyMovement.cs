@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SkyMovement : MonoBehaviour {
 
-	private float speed;
+	public float speed;
 	private float skyLength;
 	private float skyCount;
 	

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Scenery : MonoBehaviour {
 	
-	private float speed;
+	public float speed;
 	private float maxSpeed;
 	
 	private float sceneryLength;
