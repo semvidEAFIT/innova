@@ -2,24 +2,23 @@ using UnityEngine;
 using System.Collections;
 
 public class JumpCounter : MonoBehaviour {
-	
-	private int counter;
+
+    private static int counter;
+
+    public static int Counter
+    {
+        get { return JumpCounter.counter; }
+    }
 	
 	// Use this for initialization
 	void Start () {
 		counter = 0;
 	}
 	
-	// Update is called once per frame
-	void Update (){
-		
-	}
-	
 	void OnTriggerEnter(Collider  other){
 		if (other.tag == "Obstacle"){
 			counter++;
 			Destroy(other.gameObject, 3f);
-			Debug.Log(counter);
 		}
 	}
 	
@@ -28,6 +27,6 @@ public class JumpCounter : MonoBehaviour {
 	}
 	
 	public void resetStreak(){
-		this.counter = 0;
+		JumpCounter.counter = 0;
 	}
 }

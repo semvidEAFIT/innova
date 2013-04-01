@@ -34,7 +34,6 @@ public class Observable: MonoBehaviour {
         if (isChanged())
         {
             changed = false;
-            Debug.Log(observer);
             observer.UpdateObserver(this);
         }
     }

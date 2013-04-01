@@ -36,7 +36,8 @@ public class LevelCtrl : MonoBehaviour {
     public float fadeDuration = 5.0f;
     public float elapsedFadeTime = 0.0f;
 	private float timeElapsed;
-	
+    public GUISkin skin;
+
 	void Awake(){
 		levelCtrl = this;
 	}
@@ -44,7 +45,6 @@ public class LevelCtrl : MonoBehaviour {
 	void Start(){
 		objectGenerator = Instantiate(objectGenerator, new Vector3(transform.position.x + sceneryLength, objectGenerator.transform.position.y, 
 			objectGenerator.transform.position.z), transform.rotation) as GameObject;
-		
 		PlayLoopPrincipal();
 	}
 	
@@ -85,9 +85,17 @@ public class LevelCtrl : MonoBehaviour {
         }       
     }
 	
-//	void OnGUI () {
-//		
-//	}
+	void OnGUI () {
+        if (skin != null)
+        {
+            GUI.skin = skin;
+        }
+        GUI.Label(new Rect(0,0,Screen.width/8, Screen.height/8), "SCORE:");
+        GUI.TextField(new Rect(Screen.width/8, 0, Screen.width/8, Screen.height/8), Player.getScore().ToString());
+
+        GUI.Label(new Rect(3*Screen.width/4, 0, Screen.width / 8, Screen.height / 8), "Streak:");
+        GUI.TextField(new Rect(7*Screen.width/8, 0, Screen.width / 8, Screen.height / 8), "x"+JumpCounter.Counter);
+	}
 	
 	public void PlayLoopPrincipal (){
 		audio.loop=false;
