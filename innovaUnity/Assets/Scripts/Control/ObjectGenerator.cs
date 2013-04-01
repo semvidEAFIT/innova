@@ -19,6 +19,8 @@ public class ObjectGenerator : MonoBehaviour{
 	public List<GameObject> backgrounds;
 	public List<GameObject> sky;
 	
+	public List<GameObject> mountains;
+	
 	public GameObject floor;
 	
 	public GameObject playerBoy, playerGirl;
@@ -52,6 +54,11 @@ public class ObjectGenerator : MonoBehaviour{
 		for(int i = 0; i < sky.Count; i++){
 			Instantiate(sky[i], new Vector3(sky[i].transform.position.x + (i * skyLength), sky[i].transform.position.y + 20, sky[i].transform.position.z), 
 				sky[i].transform.rotation);
+		}
+		
+		for(int i = 0; i < mountains.Count; i++){
+			Instantiate(mountains[i], new Vector3(mountains[i].transform.position.x + (i * skyLength), mountains[i].transform.position.y + 29, sky[i].transform.position.z), 
+				mountains[i].transform.rotation);
 		}
 		
 		for(int i = 0; i < backgrounds.Count - 1; i++){
