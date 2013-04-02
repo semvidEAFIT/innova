@@ -80,7 +80,7 @@ public class LevelCtrl : MonoBehaviour {
 
     public void WinGame()
     {
-        Player.StopScore = true;
+        Player.Finished = true;
 		setSpeedToZero();
         
         //Destroy(this.objectGenerator);
@@ -91,7 +91,7 @@ public class LevelCtrl : MonoBehaviour {
 	
     public void LoseGame() {
         lost = true;
-        Player.StopScore = true;
+        Player.Finished = true;
         PlayFail();
 		setSpeedToZero();
         if(loseScreen != null){
@@ -104,12 +104,12 @@ public class LevelCtrl : MonoBehaviour {
         {
             GUI.skin = skin;
         }
-        GUI.Label(new Rect(0,0,Screen.width/8, Screen.height/8), "SCORE:");
+        GUI.Label(new Rect(0,0,Screen.width/8, Screen.height/16), "SCORE:");
         
-        GUI.TextField(new Rect(Screen.width/8, 0, Screen.width/8, Screen.height/8), Player.getScore().ToString());
+        GUI.TextField(new Rect(Screen.width/8, 0, Screen.width/8, Screen.height/16), ((int)Player.getScore()).ToString());
 
-        GUI.Label(new Rect(3*Screen.width/4, 0, Screen.width / 8, Screen.height / 8), "Streak:");
-        GUI.TextField(new Rect(7*Screen.width/8, 0, Screen.width / 8, Screen.height / 8), "x"+JumpCounter.Counter);
+        GUI.Label(new Rect(3*Screen.width/4, 0, Screen.width / 8, Screen.height / 16), "STREAK:");
+        GUI.TextField(new Rect(7*Screen.width/8, 0, Screen.width / 8, Screen.height / 16), "x"+JumpCounter.Counter);
 
         if (lost)
         {
