@@ -96,8 +96,6 @@ public class Player : MonoBehaviour {
 			
 			jumped = true;
 			
-			
-			
 			//sound
 			audio.Stop();
 			audio.clip = jump;
@@ -117,12 +115,13 @@ public class Player : MonoBehaviour {
 				moveDirection.y = 0;
 				controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
 				jumped = false;
-				
-				if (!segway){
-					animation.loop=true;
-					animation.index=0;
-					animation.currentRow=3;
-				}
+
+                if (!segway)
+                {
+                    animation.loop = true;
+                    animation.index = 0;
+                    animation.currentRow = 3;
+                }
 				
 				//sound
 				audio.Stop();
@@ -142,7 +141,7 @@ public class Player : MonoBehaviour {
 			if (!segway){
 				animation.loop=false;
 				animation.currentRow=1;
-				animation.index = 3; //dont ask why...
+				animation.index = 1; //dont ask why...
 			}
 			
 			//sound
@@ -184,7 +183,7 @@ public class Player : MonoBehaviour {
 				
 				animation.loop=false;
 				animation.currentRow=2;
-				animation.index=2;
+				animation.index=1;
 				
 				levelController.GetComponent<LevelCtrl>().PlayLoopPrincipal();
 				
@@ -217,7 +216,7 @@ public class Player : MonoBehaviour {
 		Debug.Log("SEGWAY");
 		animation.loop=false;
 		animation.currentRow=3;
-		animation.index=3;
+		animation.index=0;
 		
 		segwayGO = Instantiate(segwayGO, new Vector3(transform.position.x, transform.position.y, transform.position.z), 
 			transform.rotation) as GameObject;

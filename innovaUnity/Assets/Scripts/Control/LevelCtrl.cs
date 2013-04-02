@@ -105,6 +105,7 @@ public class LevelCtrl : MonoBehaviour {
             GUI.skin = skin;
         }
         GUI.Label(new Rect(0,0,Screen.width/8, Screen.height/8), "SCORE:");
+        
         GUI.TextField(new Rect(Screen.width/8, 0, Screen.width/8, Screen.height/8), Player.getScore().ToString());
 
         GUI.Label(new Rect(3*Screen.width/4, 0, Screen.width / 8, Screen.height / 8), "Streak:");
@@ -144,13 +145,13 @@ public class LevelCtrl : MonoBehaviour {
     //    }
     //    yield return new WaitForSeconds(audio.clip.length);
     //}
-//	
-//	public IEnumerator PlayFail() {
-//		audio.loop=false;
-//		audio.clip = audioFail;
-//		audio.Play();
-//        yield return new WaitForSeconds(audio.clip.length);
-//	}
+    //	
+    //	public IEnumerator PlayFail() {
+    //		audio.loop=false;
+    //		audio.clip = audioFail;
+    //		audio.Play();
+    //        yield return new WaitForSeconds(audio.clip.length);
+    //	}
 
     public void PlayWin()
     {
