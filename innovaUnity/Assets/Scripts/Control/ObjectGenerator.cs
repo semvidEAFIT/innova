@@ -57,7 +57,7 @@ public class ObjectGenerator : MonoBehaviour{
 		}
 		
 		for(int i = 0; i < mountains.Count; i++){
-			Instantiate(mountains[i], new Vector3(mountains[i].transform.position.x + (i * skyLength), mountains[i].transform.position.y + 29, sky[i].transform.position.z), 
+			Instantiate(mountains[i], new Vector3(mountains[i].transform.position.x + (i * skyLength), mountains[i].transform.position.y + 29, mountains[i].transform.position.z), 
 				mountains[i].transform.rotation);
 		}
 		
