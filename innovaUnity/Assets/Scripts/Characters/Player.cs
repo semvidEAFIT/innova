@@ -28,7 +28,14 @@ public class Player : MonoBehaviour {
 	private float timer;
 	private static float score;
 	public static int segwayBonus = 0;
-	
+    private static bool stopScore = false;
+
+    public static bool StopScore
+    {
+        get { return Player.stopScore; }
+        set { Player.stopScore = value; }
+    }
+
 	private Sprite animation;
 	
 	private bool sliding;
@@ -63,10 +70,10 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		Debug.Log(Input.GetKeyDown(KeyCode.RightControl));
-		
-		score += (100 + streak * 10) * Time.deltaTime;
-		
+		//Debug.Log(Input.GetKeyDown(KeyCode.RightControl));
+		if(!Player.stopScore){
+		    score += (100 + streak * 10) * Time.deltaTime;
+		}
 		transform.Translate(0, move, 0);
 		move *= -1;
 		
@@ -183,32 +190,22 @@ public class Player : MonoBehaviour {
 				jumped = true;
 			}
 		}
-		if (c.tag == "Segway"){
-			if(Input.GetKeyDown(KeyCode.RightControl) && !segway) {
-				getOnSegway();
-			}
-		}
 		if (c.tag == "Crowd"){
 			levelController.GetComponent<LevelCtrl>().LoseGame();
 			Destroy(this.gameObject);
 			c.gameObject.GetComponent<Crowd>().accelerateCrowd();
 		}
 		if(c.tag == "Auditorium"){
+            animation.loop = true;
+            animation.currentRow = 0;
+            animation.index = 0;
 			levelController.GetComponent<LevelCtrl>().WinGame();
 		}
 	}
 	
 	void OnTriggerStay(Collider c){
 		if(c.tag == "Segway"){
-			if(Input.GetKeyDown(KeyCode.RightControl) && !segway) {
-				getOnSegway();
-			}
-		}
-	}
-	
-	void OnTriggerExit(Collider c){
-		if (c.tag == "Segway"){
-			if(Input.GetKeyDown(KeyCode.RightControl) && !segway) {
+			if(Input.GetKey(KeyCode.DownArrow) && !segway) {
 				getOnSegway();
 			}
 		}
