@@ -82,14 +82,19 @@ public class Player : MonoBehaviour {
 		}
 		
 		if(Input.GetKeyDown(KeyCode.Space) && !jumped && !sliding){
-			moveDirection.y = jumpSpeed;
-			jumped = true;
-			
 			if (!segway){
 				animation.loop=false;
 				animation.index=1;
 				animation.currentRow=2;
+				moveDirection.y = jumpSpeed;
+			} else {
+				moveDirection.y = jumpSpeed*2;
 			}
+			
+			
+			jumped = true;
+			
+			
 			
 			//sound
 			audio.Stop();
@@ -104,7 +109,8 @@ public class Player : MonoBehaviour {
 				currentHeight = height;
 			}
 			if (moveDirection.y >= 0 || transform.position.y+moveDirection.y * Time.deltaTime > currentHeight){
-				moveDirection.y -= gravity;
+				if (!segway) moveDirection.y -= gravity;
+				else moveDirection.y -= gravity*2;
 			}else{
 				moveDirection.y = 0;
 				controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
@@ -184,32 +190,22 @@ public class Player : MonoBehaviour {
 				jumped = true;
 			}
 		}
-		if (c.tag == "Segway"){
-			if(Input.GetKeyDown(KeyCode.RightControl) && !segway) {
-				getOnSegway();
-			}
-		}
 		if (c.tag == "Crowd"){
 			levelController.GetComponent<LevelCtrl>().LoseGame();
 			Destroy(this.gameObject);
 			c.gameObject.GetComponent<Crowd>().accelerateCrowd();
 		}
 		if(c.tag == "Auditorium"){
+            animation.loop = true;
+            animation.currentRow = 0;
+            animation.index = 0;
 			levelController.GetComponent<LevelCtrl>().WinGame();
 		}
 	}
 	
 	void OnTriggerStay(Collider c){
 		if(c.tag == "Segway"){
-			if(Input.GetKeyDown(KeyCode.RightControl) && !segway) {
-				getOnSegway();
-			}
-		}
-	}
-	
-	void OnTriggerExit(Collider c){
-		if (c.tag == "Segway"){
-			if(Input.GetKeyDown(KeyCode.RightControl) && !segway) {
+			if(Input.GetKey(KeyCode.DownArrow) && !segway) {
 				getOnSegway();
 			}
 		}

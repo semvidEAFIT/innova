@@ -47,6 +47,7 @@ public class LevelCtrl : MonoBehaviour {
 	void Start(){
 		objectGenerator = Instantiate(objectGenerator, new Vector3(transform.position.x + sceneryLength, objectGenerator.transform.position.y, 
 			objectGenerator.transform.position.z), transform.rotation) as GameObject;
+        Destroy(GameObject.Find("CharacterSelection"));
 		PlayLoopPrincipal();
 	}
 	
@@ -81,6 +82,7 @@ public class LevelCtrl : MonoBehaviour {
     {
         Player.StopScore = true;
 		setSpeedToZero();
+        
         //Destroy(this.objectGenerator);
         PlayWin();
         float length = audio.clip.length;

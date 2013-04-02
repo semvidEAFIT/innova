@@ -21,7 +21,7 @@ public class JumpCounter : MonoBehaviour {
 			Destroy(other.gameObject, 3f);
 		}
 		if (other.tag == "Segway")
-			Destroy(other.gameObject, 3f);
+			Destroy(other.gameObject);
 	}
 	
 	public void setStreak(){
