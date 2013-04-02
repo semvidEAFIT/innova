@@ -48,7 +48,7 @@ class Sprite : MonoBehaviour
 				if (loop){
 					index++;
 					index = index % rowColumns[currentRow];
-				}else if (index < rowColumns[currentRow]){
+				}else if (index < rowColumns[currentRow]-1){
 					index++;
 				}
 				
