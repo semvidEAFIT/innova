@@ -39,7 +39,7 @@ public class ObjectGenerator : MonoBehaviour{
 		current = new List<GameObject>();
 		
 		segwayUsed = false;
-		if(CharacterSelection.IsBoy){
+		if(!CharacterSelection.IsBoy){
 			Instantiate(playerGirl, playerGirl.transform.position, playerGirl.transform.rotation);
 		}else{
 			Instantiate(playerBoy, playerBoy.transform.position, playerBoy.transform.rotation);

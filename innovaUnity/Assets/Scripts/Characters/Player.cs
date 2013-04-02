@@ -28,7 +28,14 @@ public class Player : MonoBehaviour {
 	private float timer;
 	private static float score;
 	public static int segwayBonus = 0;
-	
+    private static bool stopScore = false;
+
+    public static bool StopScore
+    {
+        get { return Player.stopScore; }
+        set { Player.stopScore = value; }
+    }
+
 	private Sprite animation;
 	
 	private bool sliding;
@@ -63,10 +70,10 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
-		Debug.Log(Input.GetKeyDown(KeyCode.RightControl));
-		
-		score += (100 + streak * 10) * Time.deltaTime;
-		
+		//Debug.Log(Input.GetKeyDown(KeyCode.RightControl));
+		if(!Player.stopScore){
+		    score += (100 + streak * 10) * Time.deltaTime;
+		}
 		transform.Translate(0, move, 0);
 		move *= -1;
 		

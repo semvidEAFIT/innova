@@ -37,6 +37,8 @@ public class LevelCtrl : MonoBehaviour {
     public float elapsedFadeTime = 0.0f;
 	private float timeElapsed;
     public GUISkin skin;
+    private bool finished = false, lost = false;
+    private float elapsedTime = 0.0f;
 
 	void Awake(){
 		levelCtrl = this;
@@ -66,18 +68,28 @@ public class LevelCtrl : MonoBehaviour {
             loseScreen.renderer.material.color = new Color(loseScreen.renderer.material.color.r, loseScreen.renderer.material.color.g, loseScreen.renderer.material.color.b, Mathf.Clamp(Mathf.Lerp(256, 0, elapsedFadeTime /  fadeDuration),0,256));
             elapsedFadeTime+=Time.deltaTime;
         }
+        if(finished){
+            elapsedTime += Time.deltaTime;
+            if(elapsedTime > audio.clip.length){
+                DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Player"));
+                Application.LoadLevel("Register");
+            }
+        }
 	}
 
     public void WinGame()
     {
-        PlayWin();		
-		Destroy(this.objectGenerator);
+        Player.StopScore = true;
 		setSpeedToZero();
-		DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Player"));
-		Application.LoadLevel("Register");
+        //Destroy(this.objectGenerator);
+        PlayWin();
+        float length = audio.clip.length;
+        finished = true;
     }
 	
     public void LoseGame() {
+        lost = true;
+        Player.StopScore = true;
         PlayFail();
 		setSpeedToZero();
         if(loseScreen != null){
@@ -95,6 +107,13 @@ public class LevelCtrl : MonoBehaviour {
 
         GUI.Label(new Rect(3*Screen.width/4, 0, Screen.width / 8, Screen.height / 8), "Streak:");
         GUI.TextField(new Rect(7*Screen.width/8, 0, Screen.width / 8, Screen.height / 8), "x"+JumpCounter.Counter);
+
+        if (lost)
+        {
+            if (GUI.Button(new Rect(Screen.width / 3, 3 * Screen.height / 5, Screen.width / 3, Screen.height / 5), "Retry")) {
+                Application.LoadLevel("CharacterSelection");
+            }
+        }
 	}
 	
 	public void PlayLoopPrincipal (){
@@ -110,17 +129,19 @@ public class LevelCtrl : MonoBehaviour {
 		audio.clip = introLoopSegway;
 		audio.Play();
 	}
-	
-	
-//	public IEnumerator PlayWin(){
-//		if (audio.clip != audioGanar) {
-//			audio.loop=false;
-//			audio.Stop();
-//			audio.clip = audioGanar;
-//			audio.Play();
-//		}
-//        yield return new WaitForSeconds(audio.clip.length);
-//	}
+
+
+    //public IEnumerator PlayWin()
+    //{
+    //    if (audio.clip != audioGanar)
+    //    {
+    //        audio.loop = false;
+    //        audio.Stop();
+    //        audio.clip = audioGanar;
+    //        audio.Play();
+    //    }
+    //    yield return new WaitForSeconds(audio.clip.length);
+    //}
 //	
 //	public IEnumerator PlayFail() {
 //		audio.loop=false;
@@ -128,15 +149,17 @@ public class LevelCtrl : MonoBehaviour {
 //		audio.Play();
 //        yield return new WaitForSeconds(audio.clip.length);
 //	}
-	
-	public void PlayWin(){
-		if (audio.clip != audioGanar) {
-			audio.loop=false;
-			audio.Stop();
-			audio.clip = audioGanar;
-			audio.Play();
-		}
-	}
+
+    public void PlayWin()
+    {
+        if (audio.clip != audioGanar)
+        {
+            audio.loop = false;
+            audio.Stop();
+            audio.clip = audioGanar;
+            audio.Play();
+        }
+    }
 	public void PlayFail() {
 		audio.loop=false;
 		audio.clip = audioFail;
