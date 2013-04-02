@@ -80,7 +80,7 @@ public class LevelCtrl : MonoBehaviour {
 
     public void WinGame()
     {
-        Player.StopScore = true;
+        Player.Finished = true;
 		setSpeedToZero();
         
         //Destroy(this.objectGenerator);
@@ -91,11 +91,11 @@ public class LevelCtrl : MonoBehaviour {
 	
     public void LoseGame() {
         lost = true;
-        Player.StopScore = true;
+        Player.Finished = true;
         PlayFail();
 		setSpeedToZero();
         if(loseScreen != null){
-            loseScreen = (GameObject)GameObject.Instantiate(loseScreen, camera.transform.position + Vector3.forward * 10, Quaternion.identity);
+            loseScreen.SetActive(true);
         }       
     }
 	
@@ -104,16 +104,16 @@ public class LevelCtrl : MonoBehaviour {
         {
             GUI.skin = skin;
         }
-        GUI.Label(new Rect(0,0,Screen.width/8, Screen.height/8), "SCORE:");
+        GUI.Label(new Rect(0,0,Screen.width/8, Screen.height/16), "SCORE");
         
-        GUI.TextField(new Rect(Screen.width/8, 0, Screen.width/8, Screen.height/8), Player.getScore().ToString());
-
-        GUI.Label(new Rect(3*Screen.width/4, 0, Screen.width / 8, Screen.height / 8), "Streak:");
-        GUI.TextField(new Rect(7*Screen.width/8, 0, Screen.width / 8, Screen.height / 8), "x"+JumpCounter.Counter);
+        GUI.TextField(new Rect(Screen.width/8, 0, Screen.width/8, Screen.height/16), ((int)Player.getScore()).ToString());
+        //TODO FIX STREAK LABEL
+        GUI.Label(new Rect(3*Screen.width/4, 0, Screen.width / 6, Screen.height / 16), "STREAK");
+        GUI.TextField(new Rect(7*Screen.width/8, 0, Screen.width / 6, Screen.height / 16), "x"+JumpCounter.Counter);
 
         if (lost)
         {
-            if (GUI.Button(new Rect(Screen.width / 3, 3 * Screen.height / 5, Screen.width / 3, Screen.height / 5), "Retry")) {
+            if (GUI.Button(new Rect(Screen.width / 3, 4 * Screen.height / 6, Screen.width / 3, Screen.height / 5), "Retry")) {
                 Application.LoadLevel("CharacterSelection");
             }
         }

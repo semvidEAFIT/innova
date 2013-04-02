@@ -35,8 +35,11 @@ public class ObjectGenerator : MonoBehaviour{
 	private bool failed=false;
 	
 	void Start(){
+        if(Application.isWebPlayer){
+            gameSpeed *= 1.5f;
+            maxGameSpeed *= 1.5f;
+        }
 		distanceRun = 0f;
-		
 		iniTime = 0f;
 		current = new List<GameObject>();
 		

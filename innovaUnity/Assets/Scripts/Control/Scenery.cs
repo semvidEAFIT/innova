@@ -39,9 +39,9 @@ public class Scenery : MonoBehaviour {
 		if(speed < maxSpeed){
 			speed += speed / 100;
 		}
-		if(transform.position.x < -sceneryLength - 10){
-			transform.Translate(new Vector3(-buildingCount * sceneryLength, 0, 0));
-		}
+        //if(transform.position.x < -sceneryLength - 10){
+        //    transform.Translate(new Vector3(-buildingCount * sceneryLength, 0, 0));
+        //}
 //		if(!current.Equals(null)){
 //			current.transform.Translate(speed, 0, 0);
 //		}
