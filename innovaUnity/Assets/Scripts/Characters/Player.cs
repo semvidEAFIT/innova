@@ -46,6 +46,8 @@ public class Player : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+        score = 0;
+        stopScore = false;
 		height = transform.position.y;
 		segwayHeight = height + 4;
 		move = 0.0001f;
