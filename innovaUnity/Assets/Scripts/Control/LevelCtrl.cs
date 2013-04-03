@@ -104,11 +104,12 @@ public class LevelCtrl : MonoBehaviour {
         {
             GUI.skin = skin;
         }
+        //GUI.color = Color.black;
         GUI.Label(new Rect(0,0,Screen.width/8, Screen.height/16), "SCORE");
         
         GUI.TextField(new Rect(Screen.width/8, 0, Screen.width/8, Screen.height/16), ((int)Player.getScore()).ToString());
         //TODO FIX STREAK LABEL
-        GUI.Label(new Rect(3*Screen.width/4, 0, Screen.width / 6, Screen.height / 16), "STREAK");
+        GUI.Label(new Rect(3*Screen.width/4 - Screen.width/72, 0, Screen.width / 6, Screen.height / 16), "STREAK");
         GUI.TextField(new Rect(7*Screen.width/8, 0, Screen.width / 6, Screen.height / 16), "x"+JumpCounter.Counter);
 
         if (lost)
