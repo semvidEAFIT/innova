@@ -12,6 +12,8 @@ public class CharacterSelection : MonoBehaviour {
 	private static bool isBoy;
 	private bool hasSelectedCharacter = false;
 	
+	private float elapsedTime = 0.0f;
+	
 	public static bool IsBoy {
 		get {
 			return CharacterSelection.isBoy;
@@ -29,6 +31,14 @@ public class CharacterSelection : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if (hasSelectedCharacter) {
+			elapsedTime += Time.deltaTime;
+			if (elapsedTime > audio.clip.length) {
+				DontDestroyOnLoad(this);
+				Application.LoadLevel("TheGame");
+			}
+		}
+		
 		if (Input.GetMouseButtonDown(0)){
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -43,8 +53,6 @@ public class CharacterSelection : MonoBehaviour {
 				else isBoy=false;
 				
 				hasSelectedCharacter = true;
-				DontDestroyOnLoad(this);
-				Application.LoadLevel("TheGame");
 			}
 		}
 	}
