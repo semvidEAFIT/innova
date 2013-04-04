@@ -91,7 +91,7 @@ public class ObjectGenerator : MonoBehaviour{
 	}
 	
 	void createObstacles(){
-		int r = Mathf.RoundToInt(Random.Range(0, obstacles.Count * 2));
+		int r = Mathf.RoundToInt(Random.Range(0, obstacles.Count));
 		for(int i = 0; i < obstacles.Count; i++){
 			if(i == r){
 				current.Add(Instantiate(obstacles[i], new Vector3(Mathf.RoundToInt(Random.Range(
