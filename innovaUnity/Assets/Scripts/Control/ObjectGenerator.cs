@@ -14,7 +14,12 @@ public class ObjectGenerator : MonoBehaviour{
 	public float skyLength;
 	
 	public float gameSpeed;
-	public float maxGameSpeed;
+//	public float maxGameSpeed;
+	
+	public float distanceUntilSegway;
+	
+	public float timeToSpawn;
+	private float deltaTimeToSpawn;
 	
 	public List<GameObject> backgrounds;
 	public List<GameObject> sky;
@@ -35,9 +40,11 @@ public class ObjectGenerator : MonoBehaviour{
 	private bool failed=false;
 	
 	void Start(){
+		gameSpeed = LevelCtrl.Instance.gameSpeed;
+		deltaTimeToSpawn = 0;
         if(Application.isWebPlayer){
-            gameSpeed *= 1.5f;
-            maxGameSpeed *= 1.5f;
+//            gameSpeed *= 1.5f;
+//            maxGameSpeed *= 1.5f;
         }
 		distanceRun = 0f;
 		iniTime = 0f;
@@ -78,14 +85,18 @@ public class ObjectGenerator : MonoBehaviour{
 	
 	void Update(){
 		distanceRun = Time.time * gameSpeed;
-		
-		if(Time.time - iniTime >= 1f){
-			if (!failed) createObstacles();
+		if(Time.time - iniTime >= timeToSpawn * Time.deltaTime - deltaTimeToSpawn){
+			if (!failed){
+				createObstacles();
+				if(deltaTimeToSpawn < timeToSpawn + 1.6f){
+					deltaTimeToSpawn += 1.6f * Time.deltaTime;
+				}
+			}
 			iniTime = Time.time;
 		}
 		
 		//CAMBIAR "20" A UNA VARIABLE
-		if(distanceRun >= 8 && !segwayUsed){
+		if(distanceRun >= distanceUntilSegway && !segwayUsed){
 			createSegway();
 		}
 	}
@@ -115,9 +126,9 @@ public class ObjectGenerator : MonoBehaviour{
 		failed=true;
 		foreach (Transform child in transform){
 			if (child.tag!="Crowd"){
-				if (child.tag=="Obstacle")
-					child.GetComponent<Obstacle>().speed = 0;
-				else child.GetComponent<Scenery>().speed = 0;
+				if (child.tag == "Obstacle")
+					child.GetComponent<Obstacle>().setStopped(true);
+				else child.GetComponent<Scenery>().setStopped(true);
 			}
 		}
 	}

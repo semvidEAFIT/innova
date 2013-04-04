@@ -5,15 +5,20 @@ using System.Collections.Generic;
 public class Scenery : MonoBehaviour {
 	
 	public float speed;
+	
+	public float accelerationRate;
+	
 	private float maxSpeed;
 	
-	private float sceneryLength;
+//	private float sceneryLength;
 	
 	private int timesSwapped;
 	
-	private int buildingCount;
+//	private int buildingCount;
 	
-	private GameObject gameControl;
+	private bool stopped;
+	
+//	private GameObject gameControl;
 //	public int maxSwapsBeforeObstacles;
 //	
 //	public List<GameObject> obstacles;
@@ -23,11 +28,13 @@ public class Scenery : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		gameControl = GameObject.FindGameObjectWithTag("GameController");
-		speed = gameControl.GetComponent<LevelCtrl>().gameSpeed * 0.8f;
-		maxSpeed = gameControl.GetComponent<LevelCtrl>().maxGameSpeed * 0.9f;
-		sceneryLength = gameControl.GetComponent<LevelCtrl>().sceneryLength;
-		buildingCount = gameControl.GetComponent<LevelCtrl>().objectGenerator.GetComponent<ObjectGenerator>().backgrounds.Count;
+		accelerationRate = LevelCtrl.Instance.accelerationRate;
+//		gameControl = GameObject.FindGameObjectWithTag("GameController");
+		speed = LevelCtrl.Instance.gameSpeed * 0.9f;
+		maxSpeed = LevelCtrl.Instance.maxGameSpeed * 0.9f;
+		stopped = false;
+//		sceneryLength = LevelCtrl.Instance.sceneryLength;
+//		buildingCount = gameControl.GetComponent<LevelCtrl>().objectGenerator.GetComponent<ObjectGenerator>().backgrounds.Count;
 //		timesSwapped = 0;
 //		current = new List<GameObject>();
 //		timeElapsed = 0;
@@ -35,10 +42,14 @@ public class Scenery : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.Translate(new Vector3(speed, 0, 0));
-		if(speed < maxSpeed){
-			speed += speed / 100;
+		if(!stopped){
+			transform.Translate(new Vector3(speed, 0, 0));
+			if(speed < maxSpeed){
+				//speed += accelerationRate * Time.deltaTime * 0.9f;
+				speed = LevelCtrl.Instance.gameSpeed * 0.9f * Time.deltaTime;
+			}
 		}
+		
         //if(transform.position.x < -sceneryLength - 10){
         //    transform.Translate(new Vector3(-buildingCount * sceneryLength, 0, 0));
         //}
@@ -57,4 +68,9 @@ public class Scenery : MonoBehaviour {
 //			}
 //		}
 //	}
+	
+	public void setStopped(bool stop){
+		stopped = stop;
+		
+	}
 }

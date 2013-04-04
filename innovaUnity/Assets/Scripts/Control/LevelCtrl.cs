@@ -21,6 +21,7 @@ public class LevelCtrl : MonoBehaviour {
 	
 	public float gameSpeed;
 	public float maxGameSpeed;
+	public float accelerationRate;
 	public GameObject objectGenerator;
 	
 	public AudioClip introLoopPrincipal;
@@ -45,13 +46,17 @@ public class LevelCtrl : MonoBehaviour {
 	}
 	
 	void Start(){
-		objectGenerator = Instantiate(objectGenerator, new Vector3(transform.position.x + sceneryLength, objectGenerator.transform.position.y, 
+		objectGenerator = Instantiate(objectGenerator, new Vector3(transform.position.x + sceneryLength / 2, objectGenerator.transform.position.y, 
 			objectGenerator.transform.position.z), transform.rotation) as GameObject;
         Destroy(GameObject.Find("CharacterSelection"));
 		PlayLoopPrincipal();
 	}
 	
-	void Update(){		
+	void Update(){
+		
+		if(gameSpeed < maxGameSpeed){
+			gameSpeed += accelerationRate * Time.deltaTime;
+		}
 		
 		if (!audio.isPlaying){
 			if (audio.clip==introLoopPrincipal){
@@ -85,7 +90,7 @@ public class LevelCtrl : MonoBehaviour {
         
         //Destroy(this.objectGenerator);
         PlayWin();
-        float length = audio.clip.length;
+//        float length = audio.clip.length;
         finished = true;
     }
 	

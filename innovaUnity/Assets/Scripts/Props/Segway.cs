@@ -1,11 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class Obstacle : MonoBehaviour {
-	
-	public float speedMultiplier;
+public class Segway : MonoBehaviour {
+
+public float speedMultiplier;
 	private float speed;
-	public AudioClip[] audioFile;
 	private bool blink;
 	private bool stopped;
 	private float timer;
@@ -19,10 +18,6 @@ public class Obstacle : MonoBehaviour {
 		timer=0;
 		if (transform.childCount>0) hasChild=true;
 		else hasChild=false;
-		if (audioFile.Length!=0){
-			AudioClip fileToLoad = audioFile[Random.Range(0, audioFile.Length)];
-			audio.clip = fileToLoad;
-		}
 	}
 	
 	// Update is called once per frame
@@ -53,7 +48,6 @@ public class Obstacle : MonoBehaviour {
 				Destroy(this.gameObject, 0.2F);
 			}
 		}
-		if (audioFile.Length!=0) audio.Play();
 	}
 	
 	public void setStopped(bool stop){
