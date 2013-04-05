@@ -106,7 +106,7 @@ public class ObjectGenerator : MonoBehaviour{
 		for(int i = 0; i < obstacles.Count; i++){
 			if(i == r){
 				current.Add(Instantiate(obstacles[i], new Vector3(Mathf.RoundToInt(Random.Range(
-					transform.position.x - (sceneryLength / 2), sceneryLength)) + sceneryLength, 
+					transform.position.x - (sceneryLength / 4), sceneryLength)) + sceneryLength, 
 					transform.position.y, obstacles[1].transform.position.z), 
 					obstacles[i].transform.rotation) as GameObject);
 				current[current.Count - 1].gameObject.transform.parent = this.gameObject.transform;
