@@ -112,49 +112,6 @@ public class Player : MonoBehaviour {
                 audio.Play();
             }
 
-            Vector3 acceleration = Vector3.zero;
-            if (jumped)
-            {
-                if (segway)
-                {
-                    currentHeight = segwayHeight;
-                }
-                else
-                {
-                    currentHeight = height;
-                }
-                if (velocity.y >= 0 || transform.position.y + (velocity.y + acceleration.y * Time.deltaTime) * Time.deltaTime > currentHeight)
-                {
-                    if (!segway)
-                    {
-                        acceleration.y = -gravity;
-                    }
-                    else
-                    {
-                        acceleration.y = -gravity * 2 ;
-                    }
-                }
-                else
-                {
-                    velocity.y = 0;
-                    acceleration.y = 0;
-                    controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
-                    jumped = false;
-
-                    if (!segway)
-                    {
-                        animation.loop = true;
-                        animation.index = 0;
-                        animation.currentRow = 3;
-                    }
-
-                    //sound
-                    audio.Stop();
-                    audio.clip = fall;
-                    audio.Play();
-                }
-            }
-
             if (Input.GetKeyDown(KeyCode.DownArrow) && !jumped && !sliding && !segway)
             {
                 controller.radius = controller.radius / 2;
@@ -193,10 +150,54 @@ public class Player : MonoBehaviour {
 
                 sliding = false;
             }
-            velocity += acceleration * Time.deltaTime;
-            controller.Move(velocity * Time.deltaTime + dx);
-            dx = Vector3.zero;
         }
+
+        Vector3 acceleration = Vector3.zero;
+        if (jumped)
+        {
+            if (segway)
+            {
+                currentHeight = segwayHeight;
+            }
+            else
+            {
+                currentHeight = height;
+            }
+            if (velocity.y >= 0 || transform.position.y + (velocity.y + acceleration.y * Time.deltaTime) * Time.deltaTime > currentHeight)
+            {
+                if (!segway)
+                {
+                    acceleration.y = -gravity;
+                }
+                else
+                {
+                    acceleration.y = -gravity * 2;
+                }
+            }
+            else
+            {
+                velocity.y = 0;
+                acceleration.y = 0;
+                controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
+                jumped = false;
+
+                if (!segway)
+                {
+                    animation.loop = true;
+                    animation.index = 0;
+                    animation.currentRow = 3;
+                }
+
+                //sound
+                audio.Stop();
+                audio.clip = fall;
+                audio.Play();
+            }
+        }
+
+        velocity += acceleration * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime + dx);
+        dx = Vector3.zero;
 	}
 	
 	void OnTriggerEnter(Collider c){
