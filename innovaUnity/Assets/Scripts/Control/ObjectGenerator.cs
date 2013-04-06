@@ -71,16 +71,16 @@ public class ObjectGenerator : MonoBehaviour{
 				mountains[i].transform.rotation);
 		}
 		
-		for(int i = 0; i < backgrounds.Count - 1; i++){
+		for(int i = 0; i < backgrounds.Count; i++){
 			backgrounds[i] = Instantiate(backgrounds[i], new Vector3(transform.position.x + (i * sceneryLength), 
 				(backgrounds[i].transform.position.y + sceneryHeight / 1.8f), backgrounds[i].transform.position.z), 
 				backgrounds[i].transform.rotation) as GameObject;
 			backgrounds[i].transform.parent = this.transform;
 		}
 		
-		Instantiate(backgrounds[backgrounds.Count - 1], new Vector3(transform.position.x + ((backgrounds.Count - 1) * sceneryLength), 
-			(backgrounds[backgrounds.Count - 1].transform.position.y + sceneryHeight / 1.8f), backgrounds[backgrounds.Count - 1].transform.position.z),
-			backgrounds[backgrounds.Count - 1].transform.rotation);
+//		Instantiate(backgrounds[backgrounds.Count - 1], new Vector3(transform.position.x + ((backgrounds.Count - 1) * sceneryLength), 
+//			(backgrounds[backgrounds.Count - 1].transform.position.y + sceneryHeight / 1.8f), backgrounds[backgrounds.Count - 1].transform.position.z),
+//			backgrounds[backgrounds.Count - 1].transform.rotation);
 	}
 	
 	void Update(){
@@ -106,7 +106,7 @@ public class ObjectGenerator : MonoBehaviour{
 		for(int i = 0; i < obstacles.Count; i++){
 			if(i == r){
 				current.Add(Instantiate(obstacles[i], new Vector3(Mathf.RoundToInt(Random.Range(
-					transform.position.x - (sceneryLength / 2), sceneryLength)) + sceneryLength, 
+					transform.position.x - (sceneryLength / 4), sceneryLength)) + sceneryLength, 
 					transform.position.y, obstacles[1].transform.position.z), 
 					obstacles[i].transform.rotation) as GameObject);
 				current[current.Count - 1].gameObject.transform.parent = this.gameObject.transform;
