@@ -34,11 +34,13 @@ public class ObjectGenerator : MonoBehaviour{
 	private float iniTime;
 	
 	private float distanceRun;
+	
+	private float nextX;
 		
 	private bool segwayUsed;
 	
 	private bool failed=false;
-	
+		
 	void Start(){
 		gameSpeed = LevelCtrl.Instance.gameSpeed;
 		deltaTimeToSpawn = 0;
@@ -84,10 +86,13 @@ public class ObjectGenerator : MonoBehaviour{
 	}
 	
 	void Update(){
-		distanceRun = Time.time * gameSpeed;
+		distanceRun = Time.time * gameSpeed * Time.deltaTime;
+		
 		if(Time.time - iniTime >= timeToSpawn * Time.deltaTime - deltaTimeToSpawn){
-			if (!failed){
-				createObstacles();
+			nextX = Mathf.RoundToInt(Random.Range(transform.position.x - (sceneryLength / 4), sceneryLength)) + sceneryLength;
+			Debug.Log("Obstaculo: " + nextX + "   Auditorio: " + backgrounds[backgrounds.Count - 1].transform.position.x + "   Diferencia: " + Mathf.Abs(nextX - backgrounds[backgrounds.Count - 1].transform.position.x));
+			if (!failed && (Mathf.Abs(nextX - backgrounds[backgrounds.Count - 1].transform.position.x) > 0)){
+				createObstacles(nextX);
 				if(deltaTimeToSpawn < timeToSpawn + 1.6f){
 					deltaTimeToSpawn += 1.6f * Time.deltaTime;
 				}
@@ -101,12 +106,11 @@ public class ObjectGenerator : MonoBehaviour{
 		}
 	}
 	
-	void createObstacles(){
+	void createObstacles(float x){
 		int r = Mathf.RoundToInt(Random.Range(0, obstacles.Count));
 		for(int i = 0; i < obstacles.Count; i++){
 			if(i == r){
-				current.Add(Instantiate(obstacles[i], new Vector3(Mathf.RoundToInt(Random.Range(
-					transform.position.x - (sceneryLength / 4), sceneryLength)) + sceneryLength, 
+				current.Add(Instantiate(obstacles[i], new Vector3(x, 
 					transform.position.y, obstacles[1].transform.position.z), 
 					obstacles[i].transform.rotation) as GameObject);
 				current[current.Count - 1].gameObject.transform.parent = this.gameObject.transform;
