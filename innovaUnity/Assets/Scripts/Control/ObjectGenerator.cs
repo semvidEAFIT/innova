@@ -90,8 +90,7 @@ public class ObjectGenerator : MonoBehaviour{
 		
 		if(Time.time - iniTime >= timeToSpawn * Time.deltaTime - deltaTimeToSpawn){
 			nextX = Mathf.RoundToInt(Random.Range(transform.position.x - (sceneryLength / 4), sceneryLength)) + sceneryLength;
-			Debug.Log("Obstaculo: " + nextX + "   Auditorio: " + backgrounds[backgrounds.Count - 1].transform.position.x + "   Diferencia: " + Mathf.Abs(nextX - backgrounds[backgrounds.Count - 1].transform.position.x));
-			if (!failed && (Mathf.Abs(nextX - backgrounds[backgrounds.Count - 1].transform.position.x) > 0)){
+			if (!failed && nextX < backgrounds[backgrounds.Count - 1].transform.position.x){
 				createObstacles(nextX);
 				if(deltaTimeToSpawn < timeToSpawn + 1.6f){
 					deltaTimeToSpawn += 1.6f * Time.deltaTime;

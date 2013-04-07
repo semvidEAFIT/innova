@@ -260,7 +260,12 @@ public class Player : MonoBehaviour {
 	}
 	
 	public void setStreak(int streak){
-		this.streak = streak;
+		//WHAT THE FUCK
+		if(!segway){
+			this.streak = streak * 2;
+		} else {
+			this.streak = streak * 2;
+		}
 	}
 	
 	public static float getScore(){
