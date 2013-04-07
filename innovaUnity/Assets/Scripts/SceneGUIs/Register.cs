@@ -12,25 +12,47 @@ public class Register : MonoBehaviour, IObserver {
     private string document = "1127235505", name = "Rodrigo", lastNames = "Diaz Bermudez", email = "pericodiaz89@gmail.com", institution = "SemVid EAFIT";
     public WebServiceHelper ws;
     public GUISkin skin;
+    private string selectedControl = null;
+    private bool editable = false;
+    void Start() { 
+        if(PlayerData.hasInstance()){
+            JSONObject player = PlayerData.Data;
+            document = player.GetString("document");
+            name = player.GetString("name");
+            lastNames = player.GetString("lastNames");
+            email = player.GetString("email");
+            institution = player.GetString("institution");
+            editable = false;
+        }
+    }
 
     void OnGUI() {
         if(skin!=null){
             GUI.skin = skin;
         }
+
+        #region
         int groupWidth = 4 * Screen.width/6;
         int groupHeight = Screen.height / 2;
         GUI.BeginGroup(new Rect(Screen.width/2 - groupWidth/2,Screen.height/2 - groupHeight/2, groupWidth, groupHeight));
         GUI.Box(new Rect(0, 0, groupWidth, groupHeight), "");
         GUI.Label(new Rect(groupWidth/10, groupHeight/7, 2 * groupWidth/5, groupHeight/7), "CEDULA"); // 1/10 de margen
-        document = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), document, 25);
+        string documentInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), document, 25);
+        document = (!editable) ? document : documentInput;
         GUI.Label(new Rect(groupWidth / 10, 2 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "NOMBRE"); // 1/10 de margen
-        name = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 2 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), name, 30);
+        string nameInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 2 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), name, 30);
+        name = (!editable) ? name : nameInput;
         GUI.Label(new Rect(groupWidth / 10, 3 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "APELLIDOS"); // 1/10 de margen
-        lastNames = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 3 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), lastNames, 30);
+        string lastNamesInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 3 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), lastNames, 30);
+        lastNames = (!editable) ? lastNames : lastNamesInput;
         GUI.Label(new Rect(groupWidth / 10, 4 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "EMAIL"); // 1/10 de margen
-        email = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 4 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), email, 256);
+        string emailInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 4 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), email, 256);
+        email = (!editable) ? email : emailInput;
         GUI.Label(new Rect(groupWidth / 10, 5 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "INSTITUCION"); // 1/10 de margen
-        institution = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 5 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), institution, 20);
+        string institutionInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 5 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), institution, 20);
+        institution = (!editable) ? institution : institutionInput;
+        #endregion
+
         if (GUI.Button(new Rect(groupWidth / 10, 6 * groupHeight / 7, 4 * groupWidth / 5,  groupHeight / (2 * 7)), "REGISTER"))
         {
             if (checkValidInput())
@@ -40,6 +62,16 @@ public class Register : MonoBehaviour, IObserver {
             }else{
                 Debug.Log("Nope");
             }
+        }
+
+        if(GUI.Button(new Rect(0, 0, 10, 20), "Clear Data")){
+            PlayerData.clearData();
+            document = "";
+            name = "";
+            lastNames = "";
+            email = "";
+            institution = "";
+            editable = true;
         }
         GUI.EndGroup();
     }
@@ -56,7 +88,14 @@ public class Register : MonoBehaviour, IObserver {
 
     private void registerPlayer() {
         Dictionary<string, object> parameters = new Dictionary<string, object>();
-        string player = encrypt(generateJsonFormat(document, name, lastNames, email, institution).ToString());
+        JSONObject playerData;
+        if(PlayerData.hasInstance()){
+            playerData = PlayerData.Data;
+        }else{
+            playerData = generateJsonFormat(document, name, lastNames, email, institution);
+            PlayerData.Data = playerData;
+        }
+        string player = encrypt(playerData.ToString());
         parameters.Add("Player", player);
         parameters.Add("Service", Service.Register);
         ws.callServicePost(serviceURL, parameters, this);   
