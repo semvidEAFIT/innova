@@ -57,8 +57,7 @@ public class CameraMovement : MonoBehaviour {
 			transform.Translate(velocity*dir);
 			
 			if (deltaTransform.magnitude < toleranceToSnap){
-				transform.position = new Vector3 (slides[curSlide-1].transform.position.x, slides[curSlide-1].transform.position.y + 3, 0);
-				
+				transform.position = new Vector3 (slides[curSlide-1].transform.position.x, slides[curSlide-1].transform.position.y, 0);
 				moving=false;
 			}
 		}
