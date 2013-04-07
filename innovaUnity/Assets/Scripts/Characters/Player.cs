@@ -3,13 +3,13 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-	public float jumpAcceleration;
+	public float jumpSpeed;
 	public float gravity;
 	
 	public GameObject segwayGO;
 	private GameObject levelController;
 	
-	private Vector3 moveDeltas = Vector3.zero;
+	private Vector3 velocity = Vector3.zero;
 	
 	private bool jumped;
 	private static bool segway;
@@ -30,6 +30,7 @@ public class Player : MonoBehaviour {
 	private static float score;
 	public static int segwayBonus = 0;
     private static bool finished = false;
+    private Vector3 dx = Vector3.zero;
 
     public static bool Finished
     {
@@ -95,11 +96,11 @@ public class Player : MonoBehaviour {
                     animation.loop = false;
                     animation.index = 1;
                     animation.currentRow = 2;
-                    moveDeltas.y = jumpAcceleration;
+                    velocity.y = jumpSpeed;
                 }
                 else
                 {
-                    moveDeltas.y = jumpAcceleration * 2;
+                    velocity.y = jumpSpeed * 2;
                 }
 
 
@@ -109,49 +110,6 @@ public class Player : MonoBehaviour {
                 audio.Stop();
                 audio.clip = jump;
                 audio.Play();
-            }
-
-            Vector3 currentDeltaMove = Vector3.zero;
-            if (jumped)
-            {
-                if (segway)
-                {
-                    currentHeight = segwayHeight;
-                }
-                else
-                {
-                    currentHeight = height;
-                }
-                if (moveDeltas.y >= 0 || transform.position.y + moveDeltas.y+ currentDeltaMove.y * Time.deltaTime > currentHeight)
-                {
-                    if (!segway)
-                    {
-                        currentDeltaMove.y -= gravity;
-                    }
-                    else
-                    {
-                        currentDeltaMove.y -= gravity * 2 ;
-                    }
-                }
-                else
-                {
-                    moveDeltas.y = 0;
-                    currentDeltaMove.y = 0;
-                    controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
-                    jumped = false;
-
-                    if (!segway)
-                    {
-                        animation.loop = true;
-                        animation.index = 0;
-                        animation.currentRow = 3;
-                    }
-
-                    //sound
-                    audio.Stop();
-                    audio.clip = fall;
-                    audio.Play();
-                }
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow) && !jumped && !sliding && !segway)
@@ -192,10 +150,54 @@ public class Player : MonoBehaviour {
 
                 sliding = false;
             }
-            moveDeltas += currentDeltaMove * Time.deltaTime;
-            controller.Move(moveDeltas);
-            moveDeltas.x = 0;
         }
+
+        Vector3 acceleration = Vector3.zero;
+        if (jumped)
+        {
+            if (segway)
+            {
+                currentHeight = segwayHeight;
+            }
+            else
+            {
+                currentHeight = height;
+            }
+            if (velocity.y >= 0 || transform.position.y + (velocity.y + acceleration.y * Time.deltaTime) * Time.deltaTime > currentHeight)
+            {
+                if (!segway)
+                {
+                    acceleration.y = -gravity;
+                }
+                else
+                {
+                    acceleration.y = -gravity * 2;
+                }
+            }
+            else
+            {
+                velocity.y = 0;
+                acceleration.y = 0;
+                controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
+                jumped = false;
+
+                if (!segway)
+                {
+                    animation.loop = true;
+                    animation.index = 0;
+                    animation.currentRow = 3;
+                }
+
+                //sound
+                audio.Stop();
+                audio.clip = fall;
+                audio.Play();
+            }
+        }
+
+        velocity += acceleration * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime + dx);
+        dx = Vector3.zero;
 	}
 	
 	void OnTriggerEnter(Collider c){
@@ -203,7 +205,7 @@ public class Player : MonoBehaviour {
 			if(!segway){
 				countCrashed++;
 				this.GetComponentInChildren<JumpCounter>().resetStreak();
-                moveDeltas.x -= crowdDistance / lifes - 4;
+                dx.x -= crowdDistance / lifes - 4;
 			} else {
 				Destroy(segwayGO.gameObject);
 				segway = false;
@@ -214,7 +216,7 @@ public class Player : MonoBehaviour {
 				
 				levelController.GetComponent<LevelCtrl>().PlayLoopPrincipal();
 				
-				moveDeltas.y = jumpAcceleration;
+				velocity.y = jumpSpeed;
 				jumped = true;
 			}
 		}
