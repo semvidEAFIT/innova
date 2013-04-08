@@ -18,9 +18,9 @@ public class LevelCtrl : MonoBehaviour {
 	public float sceneryHeight;
 	public float skyLength;
 	
-	public float gameSpeed;
-	public float maxGameSpeed;
-	public float accelerationRate;
+	public float gameSpeed = 50.0f;
+	public float maxGameSpeed = 90.0f;
+	public float accelerationRate = 1.0f;
 	public GameObject objectGenerator;
 	
 	public AudioClip introLoopPrincipal;

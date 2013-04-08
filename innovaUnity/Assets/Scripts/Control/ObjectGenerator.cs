@@ -8,17 +8,17 @@ public class ObjectGenerator : MonoBehaviour{
 	public GameObject segwayGO;
 	private List<GameObject> current;
 	
-	public float sceneryLength;
-	public float sceneryHeight;
+	public float sceneryLength = 125.0f;
+	public float sceneryHeight = 50.0f;
 	
-	public float skyLength;
+	public float skyLength = 540.0f;
 	
-	public float gameSpeed;
+	public float gameSpeed = 1.0f;
 //	public float maxGameSpeed;
 	
-	public float distanceUntilSegway;
+	public float distanceUntilSegway = 4.0f;
 	
-	public float timeToSpawn;
+	public float timeToSpawn = 800.0f;
 	private float deltaTimeToSpawn;
 	
 	public List<GameObject> backgrounds;
