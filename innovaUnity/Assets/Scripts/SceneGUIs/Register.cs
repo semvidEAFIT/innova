@@ -100,11 +100,10 @@ public class Register : MonoBehaviour, IObserver {
         GUI.BeginGroup(new Rect(Screen.width/10, 3*Screen.height/4 - Screen.height/7, group2Width, group2Height));
         GUI.Box(new Rect(0, 0, group2Width, group2Height), "");
         GUI.Label(new Rect(3*group2Width/7,0, group2Width/4, group2Height/6), "CONDICIONES");
-        string text = "*\tLa boleta que se otorgara al ganador de la rifa  no es transferible.\n*\tLa rifa se realizará entre los mejores 25 puntajes.\n*\tEl congreso tendrá certificación internacional.";
-        GUI.TextArea(new Rect(group2Width/16, group2Height/4, group2Width-group2Width/8, 3*group2Height/4-group2Height/4), text);
+        string text = "\t6to congreso innova entretenimiento 2013 - (Certificación internacional).\n*\tLa entrada no es transferible bajo ningún motivo.\n*\tLa entrada se sorteará entre los 25 mejores puntajes.\n*\tEl equipo de trabajo se reserva el derecho de anular participantes sin previo aviso.";
+        GUI.TextArea(new Rect(group2Width/16, group2Height/6, group2Width-group2Width/8, group2Height/2+group2Height/12), text);
         acceptConditions = GUI.Toggle(new Rect(group2Width/16, 3*group2Height/4, group2Width-group2Width/8, group2Height/8+group2Height/24), acceptConditions, "Acepto estas condiciones.");
         GUI.EndGroup();
-
 
         GUI.BeginGroup(new Rect(groupWidth + Screen.width / 10 + 10, Screen.height / 3 - groupHeight / 2, Screen.width / 6, groupHeight / 2), "");
         GUI.Box(new Rect(0, 0, group2Width-groupWidth-10, groupHeight / 2), "");
