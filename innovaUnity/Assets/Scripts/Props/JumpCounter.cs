@@ -3,11 +3,12 @@ using System.Collections;
 
 public class JumpCounter : MonoBehaviour {
 
-    private static int counter;
+    private static int counter = 0;
 
     public static int Counter
     {
-        get { return JumpCounter.counter; }
+        get { return counter; }
+        set { counter = value; }
     }
 	
 	// Use this for initialization
@@ -22,13 +23,5 @@ public class JumpCounter : MonoBehaviour {
 		}
 		if (other.tag == "Segway")
 			Destroy(other.gameObject);
-	}
-	
-	public void setStreak(){
-		this.transform.parent.GetComponent<Player>().setStreak(counter);
-	}
-	
-	public void resetStreak(){
-		JumpCounter.counter = 0;
 	}
 }

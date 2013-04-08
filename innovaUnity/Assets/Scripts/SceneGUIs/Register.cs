@@ -14,7 +14,8 @@ public class Register : MonoBehaviour, IObserver {
     public GUISkin skin;
     private string selectedControl = null;
     private bool editable = false;
-    void Start() { 
+    
+    void Start() {
         if(PlayerData.hasInstance()){
             JSONObject player = PlayerData.Data;
             document = player.GetString("document");
@@ -133,7 +134,7 @@ public class Register : MonoBehaviour, IObserver {
 
     private float getScore()
     {
-        return Player.getScore();
+        return Player.Score;   
     }
 
     public void UpdateObserver(Observable target)

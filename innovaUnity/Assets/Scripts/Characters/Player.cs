@@ -15,8 +15,6 @@ public class Player : MonoBehaviour {
 	private static bool segway;
 	private bool segwayUsed;
 	private bool blink;
-	
-	private int streak;
 	private int countCrashed;
 	private int countCrashedSegway;
 	private CharacterController controller;
@@ -27,7 +25,23 @@ public class Player : MonoBehaviour {
 	private float segwayHeight;
 	private float currentHeight;
 	private float timer;
-	private static float score;
+    private static float score = 0;
+
+    public static float Score
+    {
+        get { return Player.score; }
+    }
+
+    private static int streak = 0;
+
+    public static int Streak
+    {
+        get {
+            int segwayBonus = (segway) ? 2 : 1;
+            return segwayBonus * JumpCounter.Counter;
+        }
+    }
+
 	public static int segwayBonus = 0;
     private static bool finished = false;
     private Vector3 dx = Vector3.zero;
@@ -70,7 +84,7 @@ public class Player : MonoBehaviour {
 		animation.currentRow=3;
 		animation.loop=true;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 
@@ -79,7 +93,8 @@ public class Player : MonoBehaviour {
             //Debug.Log(Input.GetKeyDown(KeyCode.RightControl));
             if (!Player.finished)
             {
-                score += (100 + streak * 10) * Time.deltaTime;
+                int segWaybonus = (segway) ? 2 : 1;
+                score += (100 + JumpCounter.Counter * segWaybonus * 100) * Time.deltaTime;
             }
             transform.Translate(0, move, 0);
             move *= -1;
@@ -181,11 +196,20 @@ public class Player : MonoBehaviour {
                 controller.Move(new Vector3(0, currentHeight - transform.position.y, 0));
                 jumped = false;
 
-                if (!segway)
+                if (!finished)
+                {
+                    if (!segway)
+                    {
+                        animation.loop = true;
+                        animation.index = 0;
+                        animation.currentRow = 3;
+                    }
+                }
+                else 
                 {
                     animation.loop = true;
+                    animation.currentRow = 0;
                     animation.index = 0;
-                    animation.currentRow = 3;
                 }
 
                 //sound
@@ -204,7 +228,7 @@ public class Player : MonoBehaviour {
 		if (c.tag == "Obstacle"){
 			if(!segway){
 				countCrashed++;
-				this.GetComponentInChildren<JumpCounter>().resetStreak();
+                JumpCounter.Counter = 0;
                 dx.x -= crowdDistance / lifes - 4;
 			} else {
 				Destroy(segwayGO.gameObject);
@@ -213,7 +237,7 @@ public class Player : MonoBehaviour {
 				animation.loop=false;
 				animation.currentRow=2;
 				animation.index=1;
-				
+                JumpCounter.Counter = 0;
 				levelController.GetComponent<LevelCtrl>().PlayLoopPrincipal();
 				
 				velocity.y = jumpSpeed;
@@ -257,21 +281,5 @@ public class Player : MonoBehaviour {
 	
 	public bool getSegwayUsed(){
 		return segwayUsed;
-	}
-	
-	public void setStreak(int streak){
-		//WHAT THE FUCK
-		if(!segway){
-			this.streak = streak * 2;
-		} else {
-			this.streak = streak * 2;
-		}
-	}
-	
-	public static float getScore(){
-		if(segway){
-			segwayBonus = 0;
-		}
-		return score + segwayBonus;
 	}
 }

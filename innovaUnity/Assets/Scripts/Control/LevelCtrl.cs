@@ -16,7 +16,6 @@ public class LevelCtrl : MonoBehaviour {
 		
 	public float sceneryLength;
 	public float sceneryHeight;
-	
 	public float skyLength;
 	
 	public float gameSpeed;
@@ -46,8 +45,8 @@ public class LevelCtrl : MonoBehaviour {
 	}
 	
 	void Start(){
-		objectGenerator = Instantiate(objectGenerator, new Vector3(transform.position.x + sceneryLength / 2, objectGenerator.transform.position.y, 
-			objectGenerator.transform.position.z), transform.rotation) as GameObject;
+        objectGenerator = Instantiate(objectGenerator, new Vector3(transform.position.x + sceneryLength / 2, objectGenerator.transform.position.y,
+            objectGenerator.transform.position.z), transform.rotation) as GameObject;
         Destroy(GameObject.Find("CharacterSelection"));
 		PlayLoopPrincipal();
 	}
@@ -109,13 +108,14 @@ public class LevelCtrl : MonoBehaviour {
         {
             GUI.skin = skin;
         }
+
         //GUI.color = Color.black;
-        GUI.Label(new Rect(0,0,Screen.width/8, Screen.height/16), "SCORE");
-        
-        GUI.TextField(new Rect(Screen.width/8, 0, Screen.width/8, Screen.height/16), ((int)Player.getScore()).ToString());
+        GUI.Label(new Rect(0, 0, Screen.width / 8, Screen.height / 16), "SCORE");
+
+        GUI.TextField(new Rect(Screen.width / 8, 0, Screen.width / 8, Screen.height / 16), ((int)Player.Score).ToString());
         //TODO FIX STREAK LABEL
-        GUI.Label(new Rect(3*Screen.width/4 - Screen.width/72, 0, Screen.width / 6, Screen.height / 16), "STREAK");
-        GUI.TextField(new Rect(7*Screen.width/8, 0, Screen.width / 6, Screen.height / 16), "x"+JumpCounter.Counter);
+        GUI.Label(new Rect(3 * Screen.width / 4 - Screen.width / 72, 0, Screen.width / 6, Screen.height / 16), "STREAK");
+        GUI.TextField(new Rect(7 * Screen.width / 8, 0, Screen.width / 6, Screen.height / 16), "x" + (Player.Streak));
 
         if (lost)
         {
