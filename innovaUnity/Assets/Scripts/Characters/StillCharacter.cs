@@ -6,8 +6,13 @@ public class StillCharacter : MonoBehaviour {
 	public Material normalSprite;
 	public Material specialSprite;
 	public GameObject particles;
-	
-	private bool characterSelected;
+
+    private bool characterSelected;
+
+    public bool CharacterSelected
+    {
+        get { return characterSelected; }
+    }
 	
 	// Use this for initialization
 	void Start () {
@@ -23,12 +28,25 @@ public class StillCharacter : MonoBehaviour {
 	}
 	
 	void OnMouseEnter() {
-		particles.particleSystem.Play();
-		renderer.material = specialSprite;
+        selectCharater(true);
 	}
+
+    public void selectCharater(bool p)
+    {
+        characterSelected = p;
+        if (p)
+        {
+            particles.particleSystem.Play();
+            renderer.material = specialSprite;
+        }
+        else 
+        {
+            renderer.material = normalSprite;
+            particles.particleSystem.Stop();
+        }
+    }
 	
 	void OnMouseExit() {
-		renderer.material = normalSprite;
-		particles.particleSystem.Stop();
+        selectCharater(false);
 	}
 }

@@ -46,7 +46,7 @@ public class Obstacle : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter (Collider c) {
-		if (c.tag == "Player"){
+		if (c.tag == "Player" ){
 			if(this.gameObject.tag != "Segway"){
 				blink = true;
 				Destroy(collider);
@@ -55,7 +55,14 @@ public class Obstacle : MonoBehaviour {
 		}
 		if (audioFile.Length!=0) audio.Play();
 	}
-	
+
+    void OnCollisionEnter(Collision c) { 
+        if(c.collider.tag == "Crowd"){
+            Destroy(collider);
+            DestroyImmediate(this.gameObject);
+            if (audioFile.Length != 0) audio.Play();
+        }
+    }
 	public void setStopped(bool stop){
 		stopped = stop;
 	}

@@ -39,6 +39,14 @@ public class CharacterSelection : MonoBehaviour {
 			}
 		}
 		
+        if(girl.GetComponent<StillCharacter>().CharacterSelected){
+            boy.GetComponent<StillCharacter>().selectCharater(false);
+        }
+
+        if(boy.GetComponent<StillCharacter>().CharacterSelected){
+            girl.GetComponent<StillCharacter>().selectCharater(false);
+        }
+
 		if (Input.GetMouseButtonDown(0)){
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -55,5 +63,30 @@ public class CharacterSelection : MonoBehaviour {
 				hasSelectedCharacter = true;
 			}
 		}
+
+        if(!hasSelectedCharacter){
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                isBoy = false;
+                girl.GetComponent<StillCharacter>().selectCharater(true);
+                boy.GetComponent<StillCharacter>().selectCharater(false);
+            }
+            else 
+            {
+                if(Input.GetKeyDown(KeyCode.LeftArrow)){
+                    isBoy = true;
+                    girl.GetComponent<StillCharacter>().selectCharater(false);
+                    boy.GetComponent<StillCharacter>().selectCharater(true);
+                }
+            }
+        }
+
+        if(Input.GetKeyDown(KeyCode.Space)){
+            hasSelectedCharacter = true;
+            audio.Stop();
+            audio.clip = characterSelected;
+            audio.loop = false;
+            audio.Play();
+        }
 	}
 }

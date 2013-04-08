@@ -46,7 +46,7 @@ public class Scenery : MonoBehaviour {
 			transform.Translate(new Vector3(speed, 0, 0));
 			if(speed < maxSpeed){
 				//speed += accelerationRate * Time.deltaTime * 0.9f;
-				speed = LevelCtrl.Instance.gameSpeed * 0.9f * Time.deltaTime;
+				speed = LevelCtrl.Instance.gameSpeed  * Time.deltaTime;
 			}
 		}
 		

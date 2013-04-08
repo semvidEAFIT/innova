@@ -27,7 +27,6 @@ public class ObjectGenerator : MonoBehaviour{
 	public List<GameObject> mountains;
 	
 	public GameObject floor;
-	
 	public GameObject playerBoy, playerGirl;
 	public GameObject crowd;
 	
@@ -44,10 +43,6 @@ public class ObjectGenerator : MonoBehaviour{
 	void Start(){
 		gameSpeed = LevelCtrl.Instance.gameSpeed;
 		deltaTimeToSpawn = 0;
-        if(Application.isWebPlayer){
-//            gameSpeed *= 1.5f;
-//            maxGameSpeed *= 1.5f;
-        }
 		distanceRun = 0f;
 		iniTime = 0f;
 		current = new List<GameObject>();
@@ -60,9 +55,9 @@ public class ObjectGenerator : MonoBehaviour{
 		}
 		crowd = Instantiate(crowd, crowd.transform.position, crowd.transform.rotation) as GameObject;
 		crowd.transform.parent = this.transform;
-		
-		Instantiate(floor, floor.transform.position, floor.transform.rotation);
-		
+
+        floor = (GameObject)Instantiate(floor, floor.transform.position, floor.transform.rotation);
+        floor.transform.parent = this.transform;
 		for(int i = 0; i < sky.Count; i++){
 			Instantiate(sky[i], new Vector3(sky[i].transform.position.x + (i * skyLength), sky[i].transform.position.y + 20, sky[i].transform.position.z), 
 				sky[i].transform.rotation);

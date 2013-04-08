@@ -104,7 +104,7 @@ public class Player : MonoBehaviour {
                 segway = false;
             }
 
-            if (Input.GetKeyDown(KeyCode.Space) && !jumped && !sliding)
+            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow)) && !jumped && !sliding)
             {
                 if (!segway)
                 {
@@ -129,7 +129,7 @@ public class Player : MonoBehaviour {
 
             if (Input.GetKeyDown(KeyCode.DownArrow) && !jumped && !sliding && !segway)
             {
-                controller.radius = controller.radius / 2;
+                controller.height = controller.height / 2;
                 controller.center = new Vector3(controller.center.x, controller.center.y, controller.center.z + 2.5f);
 
                 if (!segway)
@@ -150,7 +150,7 @@ public class Player : MonoBehaviour {
 
             if (Input.GetKeyUp(KeyCode.DownArrow) && sliding)
             {
-                controller.radius = controller.radius * 2;
+                controller.height = controller.height * 2;
                 controller.center = new Vector3(controller.center.x, controller.center.y, controller.center.z - 2.5f);
 
                 if (!segway)

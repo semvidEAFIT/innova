@@ -20,10 +20,10 @@ class Database {
     private $password;
 
     private function __construct() {
-        $this->server = 'localhost';
-        $this->databaseName = 'innova';
-        $this->user = 'root';
-        $this->password = '';
+        $this->server = '50.63.244.57';
+        $this->databaseName = 'semvidInnova';
+        $this->user = 'semvidInnova';
+        $this->password = 'Innova2013!';
     }
 
     public function getServer() {

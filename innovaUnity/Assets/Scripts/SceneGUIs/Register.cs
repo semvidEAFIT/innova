@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
@@ -8,14 +8,23 @@ using System.Text;
 
 public class Register : MonoBehaviour, IObserver {
 
-    private static string serviceURL = "http://localhost/InnovaServer/services/PlayerService.php";
-    private string document = "1127235505", name = "Rodrigo", lastNames = "Diaz Bermudez", email = "pericodiaz89@gmail.com", institution = "SemVid EAFIT";
+    private static string serviceURL = "http://innovaentretenimiento2013.info/InnovaServer/services/PlayerService.php";
+    private string document = "", name = "", lastNames = "", email = "", institution = "";
     public WebServiceHelper ws;
-    public GUISkin skin;
+    public GUISkin skin, rankingSkin;
     private string selectedControl = null;
-    private bool editable = false;
-    
+    private bool editable = true;
+    private bool acceptConditions = false;
+    public AudioClip chicken;
+    private int ranking;
+    private bool registered = false;
     void Start() {
+        GameObject playerGo = GameObject.Find("Girl(Clone)");
+        if(playerGo == null){
+            playerGo = GameObject.Find("Boy(Clone)");
+        }
+        Destroy(playerGo);
+
         if(PlayerData.hasInstance()){
             JSONObject player = PlayerData.Data;
             document = player.GetString("document");
@@ -35,37 +44,49 @@ public class Register : MonoBehaviour, IObserver {
         #region
         int groupWidth = 4 * Screen.width/6;
         int groupHeight = Screen.height / 2;
-        GUI.BeginGroup(new Rect(Screen.width/2 - groupWidth/2,Screen.height/2 - groupHeight/2, groupWidth, groupHeight));
+        GUI.BeginGroup(new Rect(Screen.width/10,Screen.height/3 - groupHeight/2, groupWidth, groupHeight));
         GUI.Box(new Rect(0, 0, groupWidth, groupHeight), "");
+        GUI.Label(new Rect(2*groupWidth/5,0,groupWidth/5, groupHeight/7), "FORMULARIO");
         GUI.Label(new Rect(groupWidth/10, groupHeight/7, 2 * groupWidth/5, groupHeight/7), "CEDULA"); // 1/10 de margen
-        string documentInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), document, 25);
+        string documentInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), document, 25);
         document = (!editable) ? document : documentInput;
         GUI.Label(new Rect(groupWidth / 10, 2 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "NOMBRE"); // 1/10 de margen
-        string nameInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 2 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), name, 30);
+        string nameInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 2 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), name, 30);
         name = (!editable) ? name : nameInput;
         GUI.Label(new Rect(groupWidth / 10, 3 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "APELLIDOS"); // 1/10 de margen
-        string lastNamesInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 3 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), lastNames, 30);
+        string lastNamesInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 3 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), lastNames, 30);
         lastNames = (!editable) ? lastNames : lastNamesInput;
         GUI.Label(new Rect(groupWidth / 10, 4 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "EMAIL"); // 1/10 de margen
-        string emailInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 4 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), email, 256);
+        string emailInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 4 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), email, 256);
         email = (!editable) ? email : emailInput;
         GUI.Label(new Rect(groupWidth / 10, 5 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "INSTITUCION"); // 1/10 de margen
-        string institutionInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 5 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7)), institution, 20);
+        string institutionInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 5 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), institution, 20);
         institution = (!editable) ? institution : institutionInput;
         #endregion
-
-        if (GUI.Button(new Rect(groupWidth / 10, 6 * groupHeight / 7, 4 * groupWidth / 5,  groupHeight / (2 * 7)), "REGISTER"))
+        if (!registered)
         {
-            if (checkValidInput())
+            if (GUI.Button(new Rect(groupWidth / 10, 6 * groupHeight / 7, 4 * groupWidth / 5, groupHeight / (2 * 7)), "REGISTRAR"))
             {
-                registerPlayer();
-                getPlayerRanking();
-            }else{
-                Debug.Log("Nope");
+                if (checkValidInput())
+                {
+                    registerPlayer();
+                    getPlayerRanking();
+                    registered = true;
+                }
+                else
+                {
+                    playChicken();
+                }
+            }
+        }
+        else 
+        {
+            if (GUI.Button(new Rect(groupWidth / 10, 6 * groupHeight / 7, 4 * groupWidth / 5, groupHeight / (2 * 7)), "PLAY AGAIN")) {
+                Application.LoadLevel("CharacterSelection");
             }
         }
 
-        if(GUI.Button(new Rect(0, 0, 10, 20), "Clear Data")){
+        if(GUI.Button(new Rect(0, 0, groupWidth/8, groupHeight/7), "CLEAR")){
             PlayerData.clearData();
             document = "";
             name = "";
@@ -75,11 +96,39 @@ public class Register : MonoBehaviour, IObserver {
             editable = true;
         }
         GUI.EndGroup();
+        int group2Width = 4*Screen.width/5, group2Height = Screen.height/4;
+        GUI.BeginGroup(new Rect(Screen.width/10, 3*Screen.height/4 - Screen.height/7, group2Width, group2Height));
+        GUI.Box(new Rect(0, 0, group2Width, group2Height), "");
+        GUI.Label(new Rect(3*group2Width/7,0, group2Width/4, group2Height/6), "CONDICIONES");
+        string text = "*\tLa boleta que se otorgara al ganador de la rifa  no es transferible.\n*\tLa rifa se realizará entre los mejores 25 puntajes.\n*\tEl congreso tendrá certificación internacional.";
+        GUI.TextArea(new Rect(group2Width/16, group2Height/4, group2Width-group2Width/8, 3*group2Height/4-group2Height/4), text);
+        acceptConditions = GUI.Toggle(new Rect(group2Width/16, 3*group2Height/4, group2Width-group2Width/8, group2Height/8+group2Height/24), acceptConditions, "Acepto estas condiciones.");
+        GUI.EndGroup();
+
+
+        GUI.BeginGroup(new Rect(groupWidth + Screen.width / 10 + 10, Screen.height / 3 - groupHeight / 2, Screen.width / 6, groupHeight / 2), "");
+        GUI.Box(new Rect(0, 0, group2Width-groupWidth-10, groupHeight / 2), "");
+        GUI.Label(new Rect(15, 0, group2Width - groupWidth - 10, groupHeight / (2*4)), "RANKING");
+        if(rankingSkin != null){
+            GUI.skin = rankingSkin;
+        }
+        string rank = (ranking != 0) ? ranking.ToString() : "";
+        GUI.Label(new Rect(10, (groupHeight / (2 * 4)+10), group2Width - groupWidth - 20, (3*groupHeight / (2 * 4))-10), rank);
+        GUI.EndGroup();
+
+    }
+
+    private void playChicken()
+    {
+        audio.Stop();
+        audio.loop = false;
+        audio.clip = chicken;
+        audio.Play();
     }
 
     private bool checkValidInput()
     {
-        return document.Trim() != "" && name.Trim() != "" && lastNames.Trim() != "" && isEmail(email) && institution.Trim() != "";
+        return acceptConditions && document.Trim() != "" && name.Trim() != "" && lastNames.Trim() != "" && isEmail(email) && institution.Trim() != "";
     }
 
     private bool isEmail(string email) { 
@@ -123,7 +172,7 @@ public class Register : MonoBehaviour, IObserver {
         player.Add("id", "");
         player.Add("document", document);
         player.Add("name", name);
-        player.Add("lastName", lastNames);
+        player.Add("lastNames", lastNames);
         player.Add("email", email);
         player.Add("institution", institution);
         player.Add("score", getScore());
@@ -141,7 +190,11 @@ public class Register : MonoBehaviour, IObserver {
     {
         Queue<string> responses = ((WebServiceHelper)target).Responses[this]; 
         while(responses.Count > 0){
-            Debug.Log(responses.Dequeue());
+            string response = responses.Dequeue();
+            JSONObject rankingObj = JSONObject.Parse(response);
+            if(rankingObj!=null && rankingObj.ContainsKey("ranking")){
+                this.ranking = int.Parse(rankingObj.GetValue("ranking").Str);
+            }
         }
     }
 }
