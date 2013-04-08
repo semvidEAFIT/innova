@@ -24,7 +24,11 @@ public class Player : MonoBehaviour {
 	private float height;
 	private float segwayHeight;
 	private float currentHeight;
+	
 	private float timer;
+	private float timerBlink;
+	public float invTime=1;
+	
     private static float score = 0;
 
     public static float Score
@@ -70,6 +74,8 @@ public class Player : MonoBehaviour {
 		jumped = false;
 		sliding = false;
 		timer = 0;
+		timerBlink=0;
+		blink=false;
 		countCrashed = 0;
 		controller = GetComponent<CharacterController>();
 		segway = false;
@@ -87,7 +93,22 @@ public class Player : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
+		
+		if (blink){
+			if(timer<invTime){
+				timer+= Time.deltaTime;
+				timerBlink += Time.deltaTime;
+				if (timerBlink>0.05f){
+					renderer.enabled = !renderer.enabled;
+					timerBlink = 0;
+				}
+			} else {
+				blink=false;
+				renderer.enabled = true;
+				timer=0;
+			}
+		}
+		
         if (!finished)
         {
             //Debug.Log(Input.GetKeyDown(KeyCode.RightControl));
@@ -227,9 +248,12 @@ public class Player : MonoBehaviour {
 	void OnTriggerEnter(Collider c){
 		if (c.tag == "Obstacle"){
 			if(!segway){
-				countCrashed++;
-                JumpCounter.Counter = 0;
-                dx.x -= crowdDistance / lifes - 4;
+				if (!blink){
+					blink=true;
+					countCrashed++;
+	                JumpCounter.Counter = 0;
+	                dx.x -= crowdDistance / lifes - 4;
+				}
 			} else {
 				Destroy(segwayGO.gameObject);
 				segway = false;
