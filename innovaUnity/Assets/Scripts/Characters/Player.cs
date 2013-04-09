@@ -255,6 +255,7 @@ public class Player : MonoBehaviour {
 	                dx.x -= crowdDistance / lifes - 4;
 				}
 			} else {
+				blink=true;
 				Destroy(segwayGO.gameObject);
 				segway = false;
                 //this.GetComponentInChildren<JumpCounter>().resetStreak();
