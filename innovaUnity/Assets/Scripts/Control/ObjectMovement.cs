@@ -29,6 +29,11 @@ public class ObjectMovement : MonoBehaviour {
         elapsedTime += Time.deltaTime;
         
         if(elapsedTime > chickenSpawnTime){
+            foreach (GameObject prev in chickens)
+            {
+                Destroy(prev);
+            }
+            chickens.Clear();
             int spawnRate = Random.Range(0, 2);
             if(chickenPrefab != null && spawnRate > 0){
                 GameObject chicken = Instantiate(chickenPrefab, spawnPoint.position, chickenPrefab.transform.rotation) as GameObject;
@@ -56,7 +61,7 @@ public class ObjectMovement : MonoBehaviour {
         }
 
         if(GUI.Button( new Rect(Screen.width/2-Screen.width/6, Screen.height/2, Screen.width/2, Screen.height/6), "CREDITS")){
-            Debug.Log("Creditos");
+            Application.LoadLevel("Credits");
         }
     }
 }

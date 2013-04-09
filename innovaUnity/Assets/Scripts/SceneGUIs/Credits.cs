@@ -24,7 +24,12 @@ public class Credits : MonoBehaviour {
 		transform.transform.Translate(0, scrollingSpeed*Time.deltaTime, 0);
 				
 		if (lineasCreditos.Length/10 + 1 < gameObject.transform.position.y) {
-			Application.LoadLevel("Intro");
+            StartCoroutine(endGame());
 		}
 	}
+
+    IEnumerator endGame() {
+        yield return new WaitForSeconds(8.0f);
+        Application.LoadLevel("MainMenu");
+    }
 }
