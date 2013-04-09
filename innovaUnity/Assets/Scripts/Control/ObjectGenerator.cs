@@ -81,9 +81,9 @@ public class ObjectGenerator : MonoBehaviour{
 	}
 	
 	void Update(){
-		distanceRun = Time.time * gameSpeed * Time.deltaTime;
+		distanceRun += LevelCtrl.Instance.gameSpeed * Time.deltaTime;
 		
-		if(Time.time - iniTime >= timeToSpawn * Time.deltaTime - deltaTimeToSpawn){
+		if(Time.time - iniTime >= timeToSpawn - deltaTimeToSpawn){
 			nextX = Mathf.RoundToInt(Random.Range(transform.position.x - (sceneryLength / 4), sceneryLength)) + sceneryLength;
 			if (!failed && nextX < backgrounds[backgrounds.Count - 1].transform.position.x){
 				createObstacles(nextX);
