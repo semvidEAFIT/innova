@@ -20,7 +20,7 @@ class Database {
     private $password;
 
     private function __construct() {
-        $this->server = '50.63.244.57';
+        $this->server = 'semvidInnova.db.10806069.hostedresource.com';
         $this->databaseName = 'semvidInnova';
         $this->user = 'semvidInnova';
         $this->password = 'Innova2013!';

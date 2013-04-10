@@ -11,14 +11,20 @@ public class Register : MonoBehaviour, IObserver {
     private static string serviceURL = "http://innovaentretenimiento2013.info/InnovaServer/services/PlayerService.php";
     private string document = "", name = "", lastNames = "", email = "", institution = "";
     public WebServiceHelper ws;
-    public GUISkin skin, rankingSkin;
-    private string selectedControl = null;
+    public GUISkin skin;
+    public GUISkin rankingSkinDafuq;
     private bool editable = true;
     private bool acceptConditions = false;
     public AudioClip chicken;
     private int ranking;
     private bool registered = false;
+    public GameObject ticket;
+
     void Start() {
+        if(!Player.GotTicket){
+            ticket.renderer.material.color = Color.black;
+            ticket.GetComponent<ParticleSystem>().enableEmission = false;
+        }
         GameObject playerGo = GameObject.Find("Girl(Clone)");
         if(playerGo == null){
             playerGo = GameObject.Find("Boy(Clone)");
@@ -33,6 +39,10 @@ public class Register : MonoBehaviour, IObserver {
             email = player.GetString("email");
             institution = player.GetString("institution");
             editable = false;
+            if(PlayerData.Data.GetNumber("score") < getScore()){
+                PlayerData.Data.Remove("score");
+                PlayerData.Data.Add("score", getScore());
+            }
         }
     }
 
@@ -48,24 +58,24 @@ public class Register : MonoBehaviour, IObserver {
         GUI.Box(new Rect(0, 0, groupWidth, groupHeight), "");
         GUI.Label(new Rect(2*groupWidth/5,0,groupWidth/5, groupHeight/7), "FORMULARIO");
         GUI.Label(new Rect(groupWidth/10, groupHeight/7, 2 * groupWidth/5, groupHeight/7), "CEDULA"); // 1/10 de margen
-        string documentInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), document, 25);
+        string documentInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20 +10, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), document, 25);
         document = (!editable) ? document : documentInput;
         GUI.Label(new Rect(groupWidth / 10, 2 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "NOMBRE"); // 1/10 de margen
-        string nameInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 2 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), name, 30);
+        string nameInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 2 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20 + 10, groupHeight / (2 * 7) + groupHeight / (2 * 7 * 3)), name, 30);
         name = (!editable) ? name : nameInput;
         GUI.Label(new Rect(groupWidth / 10, 3 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "APELLIDOS"); // 1/10 de margen
-        string lastNamesInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 3 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), lastNames, 30);
+        string lastNamesInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 3 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20 + 10, groupHeight / (2 * 7) + groupHeight / (2 * 7 * 3)), lastNames, 30);
         lastNames = (!editable) ? lastNames : lastNamesInput;
         GUI.Label(new Rect(groupWidth / 10, 4 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "EMAIL"); // 1/10 de margen
-        string emailInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 4 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), email, 256);
+        string emailInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 4 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20 + 10, groupHeight / (2 * 7) + groupHeight / (2 * 7 * 3)), email, 256);
         email = (!editable) ? email : emailInput;
         GUI.Label(new Rect(groupWidth / 10, 5 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "INSTITUCION"); // 1/10 de margen
-        string institutionInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 5 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), institution, 20);
+        string institutionInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 5 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20 + 10, groupHeight / (2 * 7) + groupHeight / (2 * 7 * 3)), institution, 20);
         institution = (!editable) ? institution : institutionInput;
         #endregion
         if (!registered)
         {
-            if (GUI.Button(new Rect(groupWidth / 10, 6 * groupHeight / 7, 4 * groupWidth / 5, groupHeight / (2 * 7)), "REGISTRAR"))
+            if (GUI.Button(new Rect(groupWidth / 10, 6 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / (2 * 7)), "SUBMIT SCORE"))
             {
                 if (checkValidInput())
                 {
@@ -78,10 +88,14 @@ public class Register : MonoBehaviour, IObserver {
                     playChicken();
                 }
             }
+            if (GUI.Button(new Rect(groupWidth / 10 + 2 * groupWidth / 5  + 10, 6 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / (2 * 7)), "TRY AGAIN"))
+            {
+                Application.LoadLevel("CharacterSelection");
+            }
         }
         else 
         {
-            if (GUI.Button(new Rect(groupWidth / 10, 6 * groupHeight / 7, 4 * groupWidth / 5, groupHeight / (2 * 7)), "PLAY AGAIN")) {
+            if (GUI.Button(new Rect(groupWidth / 10, 6 * groupHeight / 7, 4 * groupWidth / 5, groupHeight / (2 * 7)), "TRY AGAIN")) {
                 Application.LoadLevel("CharacterSelection");
             }
         }
@@ -105,16 +119,31 @@ public class Register : MonoBehaviour, IObserver {
         acceptConditions = GUI.Toggle(new Rect(group2Width/16, 3*group2Height/4, group2Width-group2Width/8, group2Height/8+group2Height/24), acceptConditions, "Acepto estas condiciones.");
         GUI.EndGroup();
 
-        GUI.BeginGroup(new Rect(groupWidth + Screen.width / 10 + 10, Screen.height / 3 - groupHeight / 2, Screen.width / 6, groupHeight / 2), "");
-        GUI.Box(new Rect(0, 0, group2Width-groupWidth-10, groupHeight / 2), "");
-        GUI.Label(new Rect(15, 0, group2Width - groupWidth - 10, groupHeight / (2*4)), "RANKING");
-        if(rankingSkin != null){
-            GUI.skin = rankingSkin;
+        GUI.BeginGroup(new Rect(groupWidth + Screen.width / 10 + 10, Screen.height / 3 - groupHeight / 2, Screen.width / 5, groupHeight / 2), "");
+        GUI.Box(new Rect(0, 0, Screen.width / 7 + 20, groupHeight / 4), "");
+        if (registered)
+        {
+            GUI.Label(new Rect(15, 0, group2Width - groupWidth - 10, groupHeight / (2 * 4)), "RANKING");
         }
-        string rank = (ranking != 0) ? ranking.ToString() : "";
-        GUI.Label(new Rect(10, (groupHeight / (2 * 4)+10), group2Width - groupWidth - 20, (3*groupHeight / (2 * 4))-10), rank);
-        GUI.EndGroup();
+        else 
+        {
+            GUI.Label(new Rect(15, 0, group2Width - groupWidth - 10, groupHeight / (2 * 4)), "SCORE");
+        }
 
+        if (rankingSkinDafuq != null) {
+            GUI.skin = rankingSkinDafuq;
+        }
+
+        if (registered)
+        {
+            string rank = (ranking != 0) ? ranking.ToString() : "";
+            GUI.TextField(new Rect(10, (groupHeight / (2 * 4) -5), Screen.width / 7, Screen.height / 16), rank);
+        }
+        else 
+        {
+            GUI.TextField(new Rect(10, (groupHeight / (2 * 4) -5), Screen.width / 7, Screen.height / 16), ((int)getScore()).ToString());
+        }
+        GUI.EndGroup();
     }
 
     private void playChicken()
@@ -171,7 +200,7 @@ public class Register : MonoBehaviour, IObserver {
         player.Add("id", "");
         player.Add("document", document);
         player.Add("name", name);
-        player.Add("lastNames", lastNames);
+        player.Add("lastName", lastNames);
         player.Add("email", email);
         player.Add("institution", institution);
         player.Add("score", getScore());
@@ -182,7 +211,7 @@ public class Register : MonoBehaviour, IObserver {
 
     private float getScore()
     {
-        return Player.Score;   
+        return Player.Score;
     }
 
     public void UpdateObserver(Observable target)
@@ -190,6 +219,7 @@ public class Register : MonoBehaviour, IObserver {
         Queue<string> responses = ((WebServiceHelper)target).Responses[this]; 
         while(responses.Count > 0){
             string response = responses.Dequeue();
+            //Debug.Log(response);
             JSONObject rankingObj = JSONObject.Parse(response);
             if(rankingObj!=null && rankingObj.ContainsKey("ranking")){
                 this.ranking = int.Parse(rankingObj.GetValue("ranking").Str);

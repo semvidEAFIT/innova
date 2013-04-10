@@ -40,6 +40,8 @@ public class LevelCtrl : MonoBehaviour {
     private bool finished = false, lost = false;
     private float elapsedTime = 0.0f;
 
+    public Texture2D heart;
+
 	void Awake(){
 		levelCtrl = this;
 	}
@@ -76,7 +78,7 @@ public class LevelCtrl : MonoBehaviour {
         if(finished){
             elapsedTime += Time.deltaTime;
             if(elapsedTime > audio.clip.length){
-                DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Player"));
+                //DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Player"));
                 Application.LoadLevel("Register");
             }
         }
@@ -86,7 +88,7 @@ public class LevelCtrl : MonoBehaviour {
     {
         Player.Finished = true;
 		setSpeedToZero();
-        
+        Player.GotTicket = true;
         //Destroy(this.objectGenerator);
         PlayWin();
 //        float length = audio.clip.length;
@@ -96,6 +98,7 @@ public class LevelCtrl : MonoBehaviour {
     public void LoseGame() {
         lost = true;
         Player.Finished = true;
+        Player.GotTicket = false;
         PlayFail();
 		setSpeedToZero();
         if(loseScreen != null){
@@ -112,16 +115,21 @@ public class LevelCtrl : MonoBehaviour {
         //GUI.color = Color.black;
         GUI.Label(new Rect(0, 0, Screen.width / 8, Screen.height / 16), "SCORE");
 
-        GUI.TextField(new Rect(Screen.width / 8, 0, Screen.width / 8, Screen.height / 16), ((int)Player.Score).ToString());
+        GUI.TextField(new Rect(Screen.width / 8, 0, Screen.width / 7, Screen.height / 16), ((int)Player.Score).ToString());
         //TODO FIX STREAK LABEL
         GUI.Label(new Rect(3 * Screen.width / 4 - Screen.width / 72, 0, Screen.width / 6, Screen.height / 16), "STREAK");
-        GUI.TextField(new Rect(7 * Screen.width / 8, 0, Screen.width / 6, Screen.height / 16), "x" + (Player.Streak));
+        GUI.TextField(new Rect(7 * Screen.width / 8, 0, Screen.width / 10, Screen.height / 16), "x" + (Player.Streak));
 
         if (lost)
         {
-            if (GUI.Button(new Rect(Screen.width / 3, 4 * Screen.height / 6, Screen.width / 3, Screen.height / 5), "Retry")) {
-                Application.LoadLevel("CharacterSelection");
+            if (GUI.Button(new Rect(Screen.width / 3, 4 * Screen.height / 6, Screen.width / 3, Screen.height / 5), "Next")) {
+                Application.LoadLevel("Register");
             }
+        }
+
+        for (int i = 0; i < Player.Lifes; i++)
+        {
+            GUI.Label(new Rect( Screen.width/2 - 165/2 + (55 * i), 10, 50, 50), heart);
         }
 	}
 	

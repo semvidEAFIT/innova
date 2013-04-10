@@ -13,7 +13,7 @@ public class CameraMovement : MonoBehaviour
     private int curSlide;
 
     private bool firstTime;
-    private string[] scriptsDialogs = { "Que hace toda esa gente reunida?", "\"Se agotan las entradas para el congreso\nde entretenimiento innova, consigue\nla tuya ahora, Yo voy a ir... ¿y tu?\"", "Necesito conseguir mi entrada antes\nque toda esta gente las agote!" };
+    private string[] scriptsDialogs = { "Que hace toda esa gente reunida?", "\"Se agotan las entradas para el congreso de\nentretenimiento innova, consigue la tuya ahora,\nYo voy a ir... ¿y tu?\"", "Necesito conseguir mi entrada antes\nque toda esta gente las agote!" };
     private Vector3 dir;
     private bool moving;
     private float velocity;
@@ -33,6 +33,9 @@ public class CameraMovement : MonoBehaviour
         curSlide = 0;
         firstTime = true;
         moving = false;
+        speed = 1;
+        NextSlide();
+        speed = 5;
     }
 
     // Update is called once per frame
