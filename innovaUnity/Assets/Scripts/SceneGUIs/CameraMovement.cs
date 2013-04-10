@@ -33,6 +33,9 @@ public class CameraMovement : MonoBehaviour
         curSlide = 0;
         firstTime = true;
         moving = false;
+        speed = 1;
+        NextSlide();
+        speed = 5;
     }
 
     // Update is called once per frame

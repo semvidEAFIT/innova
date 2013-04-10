@@ -22,14 +22,19 @@ public class Credits : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		transform.transform.Translate(0, scrollingSpeed*Time.deltaTime, 0);
-				
-		if (lineasCreditos.Length/10 + 1 < gameObject.transform.position.y) {
+
+        if (lineasCreditos.Length / 10 + 1 < gameObject.transform.position.y)
+        {
             StartCoroutine(endGame());
 		}
+
+        if(Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.Space)){
+            Application.LoadLevel("MainMenu");
+        }
 	}
 
     IEnumerator endGame() {
-        yield return new WaitForSeconds(8.0f);
+        yield return new WaitForSeconds(0.5f);
         Application.LoadLevel("MainMenu");
     }
 }

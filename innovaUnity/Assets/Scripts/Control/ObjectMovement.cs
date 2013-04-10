@@ -12,6 +12,8 @@ public class ObjectMovement : MonoBehaviour {
     private float elapsedTime = 0.0f;
     public GameObject chickenPrefab;
     public GUISkin skin;
+    public bool spawning = true;
+
     void Start() {
         chickens = new ArrayList();
     }
@@ -26,38 +28,41 @@ public class ObjectMovement : MonoBehaviour {
         {
             c.transform.Translate(Vector3.right * displacementSpeed * 4 * Time.deltaTime);
         }
-        elapsedTime += Time.deltaTime;
-        
-        if(elapsedTime > chickenSpawnTime){
-            foreach (GameObject prev in chickens)
-            {
-                Destroy(prev);
-            }
-            chickens.Clear();
+        elapsedTime += Time.deltaTime; 
+           
             int spawnRate = Random.Range(0, 2);
-            if(chickenPrefab != null && spawnRate > 0){
-                GameObject chicken = Instantiate(chickenPrefab, spawnPoint.position, chickenPrefab.transform.rotation) as GameObject;
-                chickens.Add(chicken);
-                audio.Stop();
-                int n = Random.Range(0, chickenSounds.Length);
-                audio.clip = chickenSounds[n];
-                audio.Play();
+            if(elapsedTime > chickenSpawnTime){
+                foreach (GameObject prev in chickens)
+                {
+                    Destroy(prev);
+                }
+                chickens.Clear();
+                if(chickenPrefab != null && spawnRate > 0 && spawning){
+                    GameObject chicken = Instantiate(chickenPrefab, spawnPoint.position, chickenPrefab.transform.rotation) as GameObject;
+                    chickens.Add(chicken);
+                    audio.Stop();
+                    int n = Random.Range(0, chickenSounds.Length);
+                    audio.clip = chickenSounds[n];
+                    audio.Play();
+                }
+                elapsedTime = 0.0f;
             }
-            elapsedTime = 0.0f;
-        }
 
         if(Time.time > 174){
             Time.timeScale = 0.0f;
         }
     }
 
-    void OnGUI() { 
+    void OnGUI() {
+        if (!spawning) return;
         if(skin!=null){
             GUI.skin = skin;
         }
 
         if(GUI.Button(new Rect(Screen.width/6, Screen.height/6, Screen.width/2, Screen.height/6), "PLAY GAME")){
             Application.LoadLevel("Intro");    
+            /*GetComponent<Tutorial>().enabled = true;
+            spawning = false;*/
         }
 
         if(GUI.Button( new Rect(Screen.width/2-Screen.width/6, Screen.height/2, Screen.width/2, Screen.height/6), "CREDITS")){

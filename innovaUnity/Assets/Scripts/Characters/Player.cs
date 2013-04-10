@@ -19,7 +19,20 @@ public class Player : MonoBehaviour {
 	private int countCrashedSegway;
 	private CharacterController controller;
     private float crowdDistance;
-    public int lifes= 2;
+    private static int maxLifes = 3;
+
+    public static int MaxLifes
+    {
+        get { return maxLifes; }
+    }
+
+    private static int lifes = 3;
+
+    public static int Lifes
+    {
+        get { return lifes; }
+    }
+
 	private float move;
 	private float height;
 	private float segwayHeight;
@@ -33,7 +46,9 @@ public class Player : MonoBehaviour {
 
     public static float Score
     {
-        get { return Player.score; }
+        get { 
+            return (gotTicket)? score + 10000.0f:score;    
+        }
     }
 
     private static int streak = 0;
@@ -44,6 +59,14 @@ public class Player : MonoBehaviour {
             int segwayBonus = (segway) ? 2 : 1;
             return segwayBonus * JumpCounter.Counter;
         }
+    }
+
+    private static bool gotTicket = false;
+
+    public static bool GotTicket
+    {
+        get { return Player.gotTicket; }
+        set { Player.gotTicket = value; }
     }
 
 	public static int segwayBonus = 0;
@@ -66,6 +89,8 @@ public class Player : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
+        lifes = maxLifes;
+        gotTicket = false;
         score = 0;
         finished = false;
 		height = transform.position.y;
@@ -115,7 +140,7 @@ public class Player : MonoBehaviour {
             if (!Player.finished)
             {
                 int segWaybonus = (segway) ? 2 : 1;
-                score += (100 + JumpCounter.Counter * segWaybonus * 100) * Time.deltaTime;
+                score += (150 + JumpCounter.Counter * segWaybonus * 150) * Time.deltaTime;
             }
             transform.Translate(0, move, 0);
             move *= -1;
@@ -248,11 +273,13 @@ public class Player : MonoBehaviour {
 	void OnTriggerEnter(Collider c){
 		if (c.tag == "Obstacle"){
 			if(!segway){
-				if (!blink){
+                if (!blink && !finished)
+                {
 					blink=true;
 					countCrashed++;
 	                JumpCounter.Counter = 0;
-	                dx.x -= crowdDistance / lifes - 4;
+                    lifes--;
+	                dx.x -= crowdDistance / maxLifes ;
 				}
 			} else {
 				blink=true;

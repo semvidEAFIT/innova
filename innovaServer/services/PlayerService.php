@@ -19,7 +19,7 @@ class PlayerService extends Service{
               $iv = substr($ivanddata, 0, 16);
               $data = substr($ivanddata, 16);
               $key = "04B915BA43FEB5B6";
-              $decryptedData = trim(mcrypt_decrypt(MCRYPT_BLOWFISH, hex2bin($key), hex2bin($data), MCRYPT_MODE_CBC, hex2bin($iv)));
+              $decryptedData = trim(mcrypt_decrypt(MCRYPT_BLOWFISH, pack("H*",$key), pack("H*",$data), MCRYPT_MODE_CBC, pack("H*",$iv)));
               return $this->registerPlayer(json_decode($decryptedData));
             }
         }else if(Service::checkParamGET('Service')){

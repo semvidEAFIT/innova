@@ -7,14 +7,15 @@ public class ObjectGenerator : MonoBehaviour{
 	public List<GameObject> obstacles;
 	public GameObject segwayGO;
 	private List<GameObject> current;
-	
+    public Transform spawnPoint;
 	public float sceneryLength = 125.0f;
 	public float sceneryHeight = 50.0f;
 	
 	public float skyLength = 540.0f;
 	
 	public float gameSpeed = 1.0f;
-//	public float maxGameSpeed;
+
+    public float nextObstacle;
 	
 	public float distanceUntilSegway = 4.0f;
 	
@@ -31,7 +32,9 @@ public class ObjectGenerator : MonoBehaviour{
 	public GameObject crowd;
 	
 	private float iniTime;
-	
+
+    private float minDistance = 35;
+    private float maxDistance = 70;
 	private float distanceRun;
 	
 	private float nextX;
@@ -45,6 +48,7 @@ public class ObjectGenerator : MonoBehaviour{
 		deltaTimeToSpawn = 0;
 		distanceRun = 0f;
 		iniTime = 0f;
+        getNextDistance();
 		current = new List<GameObject>();
 		
 		segwayUsed = false;
@@ -82,43 +86,62 @@ public class ObjectGenerator : MonoBehaviour{
 	
 	void Update(){
 		distanceRun += LevelCtrl.Instance.gameSpeed * Time.deltaTime;
+
+        nextObstacle -= LevelCtrl.Instance.gameSpeed * Time.deltaTime;
+        if (nextObstacle < 0)
+        {
+            getNextDistance();
+            //nextX = Mathf.RoundToInt(Random.Range(transform.position.x, transform.position.x + (sceneryLength / (LevelCtrl.Instance.gameSpeed * 0.0005f))));
+            nextX = sceneryLength;
+            if (!failed && nextX < backgrounds[backgrounds.Count - 1].transform.position.x - sceneryLength / 2)
+            {
+                if (distanceRun >= distanceUntilSegway && !segwayUsed)
+                {
+                    createSegway(nextX);
+                }
+                else 
+                {
+                    createObstacles(nextX);
+                }
+            }
+
+        }
 		
-		if(Time.time - iniTime >= timeToSpawn - deltaTimeToSpawn){
-			nextX = Mathf.RoundToInt(Random.Range(transform.position.x - (sceneryLength / 4), sceneryLength)) + sceneryLength;
-			if (!failed && nextX < backgrounds[backgrounds.Count - 1].transform.position.x){
-				createObstacles(nextX);
-				if(deltaTimeToSpawn < timeToSpawn + 1.6f){
-					deltaTimeToSpawn += 1.6f * Time.deltaTime;
-				}
-			}
-			iniTime = Time.time;
-		}
+        //if(Time.time - iniTime >= timeToSpawn - deltaTimeToSpawn){
+            //nextX = Mathf.RoundToInt(Random.Range(transform.position.x, transform.position.x + (sceneryLength / (LevelCtrl.Instance.gameSpeed * 0.0005f))));
+            //if (!failed && nextX < backgrounds[backgrounds.Count - 1].transform.position.x - sceneryLength / 2){
+            //    createObstacles(nextX);
+        //        if(deltaTimeToSpawn < timeToSpawn / 2){
+        //            deltaTimeToSpawn += LevelCtrl.Instance.accelerationRate * Time.deltaTime /*1.6f * Time.deltaTime*/;
+        //        }
+        //    }
+        //    iniTime = Time.time;
+        //}
 		
 		//CAMBIAR "20" A UNA VARIABLE
-		if(distanceRun >= distanceUntilSegway && !segwayUsed){
-			createSegway();
-		}
 	}
 	
 	void createObstacles(float x){
+
 		int r = Mathf.RoundToInt(Random.Range(0, obstacles.Count));
-		for(int i = 0; i < obstacles.Count; i++){
-			if(i == r){
-				current.Add(Instantiate(obstacles[i], new Vector3(x, 
-					transform.position.y, obstacles[1].transform.position.z), 
-					obstacles[i].transform.rotation) as GameObject);
-				current[current.Count - 1].gameObject.transform.parent = this.gameObject.transform;
-			}
-		}
+
+		current.Add(Instantiate(obstacles[r], new Vector3(x, 
+			transform.position.y, obstacles[1].transform.position.z), 
+			obstacles[r].transform.rotation) as GameObject);
+		current[current.Count - 1].gameObject.transform.parent = this.gameObject.transform;
 	}
 	
-	void createSegway(){
+	void createSegway(float x){
 		if(Mathf.RoundToInt(Random.Range(0, 5)) <= 2){
-			Instantiate(segwayGO, new Vector3(transform.position.x + sceneryLength, transform.position.y, segwayGO.transform.position.z), 
+			Instantiate(segwayGO, new Vector3(nextX, transform.position.y, segwayGO.transform.position.z), 
 				segwayGO.transform.rotation);
 		}
 		segwayUsed = true;
 	}
+
+    public void getNextDistance() {
+        nextObstacle = Random.Range(minDistance, maxDistance);
+    }
 	
 	public void StopObstacles(){
 		failed=true;
