@@ -13,11 +13,10 @@ public class Register : MonoBehaviour, IObserver {
     public WebServiceHelper ws;
     public GUISkin skin;
     public GUISkin rankingSkinDafuq;
-    private bool editable = true;
     private bool acceptConditions = false;
     public AudioClip chicken;
     private int ranking;
-    private bool registered = false;
+    private bool registered = false, clearedData = true;
     public GameObject ticket;
 
     void Start() {
@@ -35,14 +34,14 @@ public class Register : MonoBehaviour, IObserver {
             JSONObject player = PlayerData.Data;
             document = player.GetString("document");
             name = player.GetString("name");
-            lastNames = player.GetString("lastNames");
+            lastNames = player.GetString("lastName");
             email = player.GetString("email");
             institution = player.GetString("institution");
-            editable = false;
             if(PlayerData.Data.GetNumber("score") < getScore()){
                 PlayerData.Data.Remove("score");
                 PlayerData.Data.Add("score", getScore());
             }
+            clearedData = false;
         }
     }
 
@@ -59,19 +58,47 @@ public class Register : MonoBehaviour, IObserver {
         GUI.Label(new Rect(2*groupWidth/5,0,groupWidth/5, groupHeight/7), "FORMULARIO");
         GUI.Label(new Rect(groupWidth/10, groupHeight/7, 2 * groupWidth/5, groupHeight/7), "CEDULA"); // 1/10 de margen
         string documentInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20 +10, groupHeight / (2 * 7) + groupHeight / (2 * 7*3)), document, 25);
-        document = (!editable) ? document : documentInput;
+
+        if (!document.Equals(documentInput) && !clearedData)
+        {
+            clearData();
+        }
+        document = documentInput;
+        
         GUI.Label(new Rect(groupWidth / 10, 2 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "NOMBRE"); // 1/10 de margen
         string nameInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 2 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20 + 10, groupHeight / (2 * 7) + groupHeight / (2 * 7 * 3)), name, 30);
-        name = (!editable) ? name : nameInput;
+        if (!name.Equals(nameInput) && !clearedData)
+        {
+            clearData();
+        }
+
+        name = nameInput;
+    
         GUI.Label(new Rect(groupWidth / 10, 3 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "APELLIDOS"); // 1/10 de margen
         string lastNamesInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 3 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20 + 10, groupHeight / (2 * 7) + groupHeight / (2 * 7 * 3)), lastNames, 30);
-        lastNames = (!editable) ? lastNames : lastNamesInput;
+        if (!lastNames.Equals(lastNamesInput) && !clearedData)
+        {
+            clearData();
+        }
+
+        lastNames = lastNamesInput;
+        
         GUI.Label(new Rect(groupWidth / 10, 4 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "EMAIL"); // 1/10 de margen
         string emailInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 4 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20 + 10, groupHeight / (2 * 7) + groupHeight / (2 * 7 * 3)), email, 256);
-        email = (!editable) ? email : emailInput;
+        if (!email.Equals(emailInput) && !clearedData)
+        {
+            clearData();
+        }
+        email = emailInput;
+
         GUI.Label(new Rect(groupWidth / 10, 5 * groupHeight / 7, 2 * groupWidth / 5, groupHeight / 7), "INSTITUCION"); // 1/10 de margen
         string institutionInput = GUI.TextField(new Rect(groupWidth / 5 + groupWidth / 7, 5 * groupHeight / 7, 3 * groupWidth / 5 - groupWidth / 20 + 10, groupHeight / (2 * 7) + groupHeight / (2 * 7 * 3)), institution, 20);
-        institution = (!editable) ? institution : institutionInput;
+        if (!institution.Equals(institutionInput) && !clearedData)
+        {
+            clearData();
+        }
+        institution = institutionInput;
+     
         #endregion
         if (!registered)
         {
@@ -100,15 +127,6 @@ public class Register : MonoBehaviour, IObserver {
             }
         }
 
-        if(GUI.Button(new Rect(0, 0, groupWidth/8, groupHeight/7), "CLEAR")){
-            PlayerData.clearData();
-            document = "";
-            name = "";
-            lastNames = "";
-            email = "";
-            institution = "";
-            editable = true;
-        }
         GUI.EndGroup();
         int group2Width = 4*Screen.width/5, group2Height = Screen.height/4;
         GUI.BeginGroup(new Rect(Screen.width/10, 3*Screen.height/4 - Screen.height/7, group2Width, group2Height));
@@ -146,6 +164,18 @@ public class Register : MonoBehaviour, IObserver {
         GUI.EndGroup();
     }
 
+    private void clearData()
+    {
+        Debug.Log("YEAH");
+        PlayerData.clearData();
+        document = "";
+        name = "";
+        lastNames = "";
+        email = "";
+        institution = "";
+        clearedData = true;
+    }
+
     private void playChicken()
     {
         audio.Stop();
@@ -160,7 +190,7 @@ public class Register : MonoBehaviour, IObserver {
     }
 
     private bool isEmail(string email) { 
-        Regex r = new Regex("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\\b");
+        Regex r = new Regex("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum|co|es)\\b");
         return r.IsMatch(email);
     }
 
