@@ -150,7 +150,7 @@ public class Player : MonoBehaviour {
                 segway = false;
             }
 
-            if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow)) && !jumped && !sliding)
+            if ((Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow)) && !jumped && !sliding)
             {
                 if (!segway)
                 {
@@ -173,7 +173,7 @@ public class Player : MonoBehaviour {
                 audio.Play();
             }
 
-            if (Input.GetKeyDown(KeyCode.DownArrow) && !jumped && !sliding && !segway)
+            if (Input.GetKey(KeyCode.DownArrow) && !jumped && !sliding && !segway)
             {
                 controller.height = controller.height / 2;
                 controller.center = new Vector3(controller.center.x, controller.center.y, controller.center.z + 2.5f);
